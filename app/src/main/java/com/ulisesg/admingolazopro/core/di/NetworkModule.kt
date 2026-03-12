@@ -1,4 +1,4 @@
-package com.alilopez.kt_demohilt.core.di
+package com.ulisesg.admingolazopro.core.di
 
 import dagger.Module
 import dagger.Provides
@@ -13,10 +13,9 @@ import javax.inject.Singleton
 object NetworkModule {
     @Provides
     @Singleton
-    @JsonPlaceHolderRetrofit
     fun provideRetrofit(): Retrofit {
         return Retrofit.Builder()
-            .baseUrl("https://jsonplaceholder.typicode.com/")
+            .baseUrl("http://localhost/api/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }
