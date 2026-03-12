@@ -1,7 +1,7 @@
 package com.ulisesg.admingolazopro.features.auth.data.datasource.remote.models
 
 data class RegisterRequest(
-    val name: String,
+    val nombre: String,
     val email: String,
     val password: String
 )
@@ -12,8 +12,7 @@ data class LoginRequest(
 )
 
 data class AuthResponse(
-    val id: String,
-    val name: String,
+    val usuario_id: String,
     val email: String,
     val rol: String,
     val token: String

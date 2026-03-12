@@ -6,11 +6,11 @@ import com.ulisesg.admingolazopro.features.auth.domain.entities.User
 
 fun AuthResponse.toDomain(): User {
     return User(
-        id = id,
-        nombre = name,
+        id = usuario_id,
+        nombre = "",
         email = email,
         password = "",
-        rol = Rol.valueOf(rol),
+        rol = Rol.entries.firstOrNull { it.value == rol } ?: Rol.ADMINISTRADOR,
         token = token
     )
 }

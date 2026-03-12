@@ -31,7 +31,7 @@ fun NavigationWrapper() {
                     navController.navigate(Login)
                 },
                 onRegisterSuccess = {
-                    navController.navigate(Login)
+                    navController.navigate(Products)
                 }
             )
         }

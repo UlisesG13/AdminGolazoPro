@@ -5,6 +5,7 @@
 
 
     <application
+        android:usesCleartextTraffic="true"
         android:name=".GolazoProApp"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"

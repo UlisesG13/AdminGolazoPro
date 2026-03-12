@@ -1,5 +1,6 @@
 package com.ulisesg.admingolazopro.features.auth.presentation.screens
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -46,6 +47,7 @@ fun RegisterScreen(
 
     LaunchedEffect(state.error) {
         state.error?.let {
+            Log.e("RegisterScreen", "Error de registro: $it")
             snackbarHostState.showSnackbar(it)
         }
     }
@@ -78,7 +80,7 @@ fun RegisterScreen(
             verticalArrangement = Arrangement.Top
         ) {
             Text(
-                text = "Crea tu cuenta",
+                text = "Registra una nueva cuenta",
                 fontSize = 24.sp,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.primary

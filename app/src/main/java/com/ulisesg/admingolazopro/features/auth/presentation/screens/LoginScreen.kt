@@ -1,5 +1,6 @@
 package com.ulisesg.admingolazopro.features.auth.presentation.screens
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -39,6 +40,7 @@ fun LoginScreen(
 
     LaunchedEffect(state.error) {
         state.error?.let {
+            Log.e("LoginScreen", "Error de inicio de sesión: $it")
             snackbarHostState.showSnackbar(it)
         }
     }

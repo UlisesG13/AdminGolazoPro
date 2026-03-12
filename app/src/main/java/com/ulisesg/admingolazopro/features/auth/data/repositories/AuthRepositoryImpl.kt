@@ -22,7 +22,7 @@ class AuthRepositoryImpl @Inject constructor(
 
     override suspend fun register(user: User): User {
         val request = RegisterRequest(
-            name = user.nombre,
+            nombre = user.nombre,
             email = user.email,
             password = user.password
         )

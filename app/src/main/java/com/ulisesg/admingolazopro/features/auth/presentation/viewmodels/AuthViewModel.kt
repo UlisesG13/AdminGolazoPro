@@ -28,7 +28,7 @@ class AuthViewModel @Inject constructor(
                 nombre = "",
                 email = "",
                 password = "",
-                rol = Rol.CLIENTE
+                rol = Rol.ADMINISTRADOR
             )
         )
     )
