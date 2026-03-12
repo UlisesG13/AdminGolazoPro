@@ -6,6 +6,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.ulisesg.admingolazopro.features.auth.presentation.screens.LoginScreen
 import com.ulisesg.admingolazopro.features.auth.presentation.screens.RegisterScreen
+import com.ulisesg.admingolazopro.features.products.presentation.screens.ProductsScreen
 
 @Composable
 fun NavigationWrapper() {
@@ -20,7 +21,7 @@ fun NavigationWrapper() {
                     navController.navigate(Register)
                 },
                 onLoginSuccess = {
-                    navController.navigate(Register) // Pendiente poner la ruta HOME
+                    navController.navigate(Products)
                 }
             )
         }
@@ -30,8 +31,14 @@ fun NavigationWrapper() {
                     navController.navigate(Login)
                 },
                 onRegisterSuccess = {
-                    navController.navigate(Login) // Pendiente poner la ruta HOME
+                    navController.navigate(Login)
                 }
+            )
+        }
+        composable<Products> {
+            ProductsScreen(
+                onAddProduct = { /* aqui va la ruta tilapia manu */ },
+                onEditProduct = { /* aqui va la ruta bagre manu*/ }
             )
         }
     }
