@@ -1,46 +1,50 @@
 package com.ulisesg.admingolazopro.features.products.data.datasource.remote.mapper
 
-import com.ulisesg.admingolazopro.features.products.data.datasource.remote.models.ImageReponse
-import com.ulisesg.admingolazopro.features.products.data.datasource.remote.models.ProductResponse
+import com.ulisesg.admingolazopro.features.products.data.datasource.remote.models.ProductoCreateRequest
+import com.ulisesg.admingolazopro.features.products.data.datasource.remote.models.ProductoResponse
+import com.ulisesg.admingolazopro.features.products.data.datasource.remote.models.ProductoUpdateRequest
 import com.ulisesg.admingolazopro.features.products.domain.entities.Product
-import com.ulisesg.admingolazopro.features.products.domain.entities.ProductImage
 
-fun ProductResponse.toDomain(): Product {
-    return Product(
-        id = producto_id ?: "",
-        nombre = nombre,
-        descripcion = descripcion ?: "",
-        precio = precio,
-        imagenes = imagenes?.map { it.toDomain() } ?: emptyList(),
-        esDestacado = esta_destacado,
-        estaActivo = esta_activo,
-        fecha_creacion = fecha_creacion,
-        categoria_id = categoria_id
-    )
-}
+object ProductoMapper {
 
-fun ImageReponse.toDomain(): ProductImage {
-    return ProductImage(
-        id = id,
-        path = path,
-        orden = orden
-    )
-}
+    fun toDomain(dto: ProductoResponse): Product {
 
-fun Product.toResponse(): ProductResponse {
-    return ProductResponse(
-        producto_id = if (id.isEmpty()) null else id,
-        nombre = nombre,
-        precio = precio,
-        descripcion = descripcion,
-        esta_activo = estaActivo,
-        esta_destacado = esDestacado,
-        categoria_id = categoria_id,
-        fecha_creacion = fecha_creacion,
-        imagenes = imagenes.map { ImageReponse(it.id, it.path, it.orden) }
-    )
-}
+        val images = dto.imagenes.map {
+            ImageMapper.toDomain(it)
+        }
 
-fun List<ProductResponse>.toDomain(): List<Product> {
-    return this.map { it.toDomain() }
+        return Product(
+            id = dto.producto_id ?: "",
+            nombre = dto.nombre,
+            precio = dto.precio,
+            descripcion = dto.descripcion ?: "",
+            estaActivo = dto.esta_activo,
+            esDestacado = dto.esta_destacado,
+            categoriaId = dto.categoria_id,
+            fechaCreacion = dto.fecha_creacion,
+            imagenes = images
+        )
+    }
+
+    fun toCreateRequest(product: Product): ProductoCreateRequest {
+        return ProductoCreateRequest(
+            nombre = product.nombre,
+            precio = product.precio,
+            descripcion = product.descripcion,
+            esta_activo = product.estaActivo,
+            esta_destacado = product.esDestacado,
+            categoria_id = product.categoriaId
+        )
+    }
+
+    fun toUpdateRequest(product: Product): ProductoUpdateRequest {
+        return ProductoUpdateRequest(
+            nombre = product.nombre,
+            precio = product.precio,
+            descripcion = product.descripcion,
+            esta_activo = product.estaActivo,
+            esta_destacado = product.esDestacado,
+            categoria_id = product.categoriaId
+        )
+    }
 }

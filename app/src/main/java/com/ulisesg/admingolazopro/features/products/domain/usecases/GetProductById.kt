@@ -4,8 +4,8 @@ import com.ulisesg.admingolazopro.features.products.domain.entities.Product
 import com.ulisesg.admingolazopro.features.products.domain.repositories.ProductsRepository
 import javax.inject.Inject
 
-class GetProducts @Inject constructor(
+class GetProductById @Inject constructor(
     private val repository: ProductsRepository
 ) {
-    suspend operator fun invoke(): List<Product> = repository.getProducts()
+    suspend operator fun invoke(id: String): Product? = repository.getProductById(id)
 }

@@ -12,6 +12,12 @@ object Register
 object Products
 
 @Serializable
+data class ProductDetail(val productId: String)
+
+@Serializable
+object ProductCreate
+
+@Serializable
 object Home
 
 @Serializable

@@ -3,103 +3,86 @@ package com.ulisesg.admingolazopro.features.products.presentation.viewmodels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ulisesg.admingolazopro.features.products.domain.entities.Product
-import com.ulisesg.admingolazopro.features.products.domain.usecases.CreateProduct
-import com.ulisesg.admingolazopro.features.products.domain.usecases.DeleteProduct
-import com.ulisesg.admingolazopro.features.products.domain.usecases.GetProducts
-import com.ulisesg.admingolazopro.features.products.domain.usecases.UpdateProduct
-import com.ulisesg.admingolazopro.features.products.presentation.screens.ProductsUiState
+import com.ulisesg.admingolazopro.features.products.domain.repositories.ProductsRepository
+import com.ulisesg.admingolazopro.features.products.presentation.components.ProductsUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class ProductsViewModel @Inject constructor(
-    private val getProductsUseCase: GetProducts,
-    private val createProductUseCase: CreateProduct,
-    private val updateProductUseCase: UpdateProduct,
-    private val deleteProductUseCase: DeleteProduct
+    private val repository: ProductsRepository
 ) : ViewModel() {
 
-    private val _state = MutableStateFlow(ProductsUiState())
-    val state: StateFlow<ProductsUiState> = _state.asStateFlow()
+    private val _uiState = MutableStateFlow(ProductsUiState())
+    val uiState: StateFlow<ProductsUiState> = _uiState
 
     init {
         loadProducts()
     }
 
     fun loadProducts() {
+
         viewModelScope.launch {
-            _state.update { it.copy(isLoading = true, error = null) }
+
+            _uiState.update {
+                it.copy(isLoading = true, error = null)
+            }
+
             try {
-                val products = getProductsUseCase()
-                _state.update { it.copy(isLoading = false, products = products) }
+
+                val products = repository.getProducts()
+
+                _uiState.update {
+                    it.copy(
+                        isLoading = false,
+                        products = products
+                    )
+                }
+
             } catch (e: Exception) {
-                _state.update { it.copy(isLoading = false, error = e.message ?: "Error al cargar productos") }
+
+                _uiState.update {
+                    it.copy(
+                        isLoading = false,
+                        error = e.message
+                    )
+                }
             }
         }
     }
 
-    fun createProduct(product: Product) {
+    fun changeDestacado(product: Product) {
+
         viewModelScope.launch {
-            _state.update { it.copy(isLoading = true, error = null, isSuccess = false) }
-            createProductUseCase(product)
-                .onSuccess { newProduct ->
-                    _state.update { 
-                        it.copy(
-                            isLoading = false, 
-                            products = it.products + newProduct,
-                            isSuccess = true 
-                        ) 
-                    }
-                }
-                .onFailure { e ->
-                    _state.update { it.copy(isLoading = false, error = e.message ?: "Error al crear producto") }
-                }
+
+            repository.changeDestacado(
+                id = product.id,
+                destacado = !product.esDestacado
+            )
         }
     }
 
-    fun updateProduct(product: Product) {
+    fun changeStatus(product: Product) {
+
         viewModelScope.launch {
-            _state.update { it.copy(isLoading = true, error = null, isSuccess = false) }
-            updateProductUseCase(product)
-                .onSuccess { updatedProduct ->
-                    _state.update { state ->
-                        state.copy(
-                            isLoading = false,
-                            products = state.products.map { if (it.id == updatedProduct.id) updatedProduct else it },
-                            isSuccess = true
-                        )
-                    }
-                }
-                .onFailure { e ->
-                    _state.update { it.copy(isLoading = false, error = e.message ?: "Error al actualizar producto") }
-                }
+
+            repository.changeStatus(
+                id = product.id,
+                status = !product.estaActivo
+            )
         }
     }
 
-    fun deleteProduct(id: String) {
+    fun deleteProduct(productId: String) {
+
         viewModelScope.launch {
-            _state.update { it.copy(isLoading = true, error = null) }
-            deleteProductUseCase(id)
-                .onSuccess {
-                    _state.update { state ->
-                        state.copy(
-                            isLoading = false,
-                            products = state.products.filter { it.id != id }
-                        )
-                    }
-                }
-                .onFailure { e ->
-                    _state.update { it.copy(isLoading = false, error = e.message ?: "Error al eliminar producto") }
-                }
+
+            repository.deleteProduct(productId)
+            loadProducts()
         }
-    }
-    
-    fun resetSuccess() {
-        _state.update { it.copy(isSuccess = false) }
     }
 }

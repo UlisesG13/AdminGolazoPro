@@ -1,108 +1,79 @@
 package com.ulisesg.admingolazopro.features.products.presentation.screens
 
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Refresh
-import androidx.compose.material3.*
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
-import com.ulisesg.admingolazopro.features.products.presentation.components.ProductCard
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import com.ulisesg.admingolazopro.features.products.presentation.components.ProductsList
 import com.ulisesg.admingolazopro.features.products.presentation.viewmodels.ProductsViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProductsScreen(
-    onAddProduct: () -> Unit,
-    onEditProduct: (String) -> Unit,
+    onProductClick: (String) -> Unit,
+    onCreateProduct: () -> Unit,
     viewModel: ProductsViewModel = hiltViewModel()
 ) {
-    val state by viewModel.state.collectAsState()
+
+    val state by viewModel.uiState.collectAsState()
 
     Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { 
-                    Text(
-                        "Inventario de Productos",
-                        fontWeight = FontWeight.Bold
-                    ) 
-                },
-                actions = {
-                    IconButton(onClick = { viewModel.loadProducts() }) {
-                        Icon(Icons.Default.Refresh, contentDescription = "Actualizar")
-                    }
-                },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.primaryContainer,
-                    titleContentColor = MaterialTheme.colorScheme.onPrimaryContainer
-                )
-            )
-        },
+
         floatingActionButton = {
+
             FloatingActionButton(
-                onClick = onAddProduct,
-                containerColor = MaterialTheme.colorScheme.primary,
-                contentColor = Color.White
+                onClick = {
+                    onCreateProduct()
+                }
             ) {
-                Icon(Icons.Default.Add, contentDescription = "Agregar Producto")
+                Icon(Icons.Default.Add, contentDescription = "Agregar producto")
             }
         }
+
     ) { padding ->
+
         Box(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(padding)
         ) {
-            if (state.isLoading) {
-                CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
-            }
 
-            if (state.error != null) {
-                Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(16.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center
-                ) {
-                    Text(
-                        text = state.error!!,
-                        color = MaterialTheme.colorScheme.error,
-                        style = MaterialTheme.typography.bodyLarge
+            when {
+
+                state.isLoading -> {
+
+                    CircularProgressIndicator(
+                        modifier = Modifier.align(Alignment.Center)
                     )
-                    Button(onClick = { viewModel.loadProducts() }) {
-                        Text("Reintentar")
-                    }
                 }
-            }
 
-            if (!state.isLoading && state.products.isEmpty() && state.error == null) {
-                Text(
-                    text = "No hay productos disponibles",
-                    modifier = Modifier.align(Alignment.Center),
-                    style = MaterialTheme.typography.bodyLarge
-                )
-            }
+                state.error != null -> {
 
-            LazyColumn(
-                modifier = Modifier.fillMaxSize(),
-                contentPadding = PaddingValues(bottom = 80.dp)
-            ) {
-                items(state.products) { product ->
-                    ProductCard(
-                        product = product,
-                        onEdit = { onEditProduct(it.id) },
-                        onDelete = { viewModel.deleteProduct(it) }
+                    Text(
+                        text = state.error ?: "Error",
+                        modifier = Modifier.align(Alignment.Center)
+                    )
+                }
+
+                else -> {
+
+                    ProductsList(
+                        products = state.products,
+                        onDelete = { viewModel.deleteProduct(it) },
+                        onProductClick = onProductClick
                     )
                 }
             }

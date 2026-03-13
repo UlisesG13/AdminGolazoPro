@@ -1,7 +1,12 @@
 package com.ulisesg.admingolazopro.features.products.domain.repositories
 
-import java.io.File
+import com.ulisesg.admingolazopro.features.products.domain.entities.Image
+import com.ulisesg.admingolazopro.features.products.domain.entities.ProductImage
 
-interface ImageRepository {
-    suspend fun uploadImage(file: File): Result<String>
+interface ImagenRepository {
+    suspend fun uploadImagen(file: ByteArray, orden: Int): Image
+    suspend fun deleteImagen(imagenId: Int)
+    suspend fun eliminarImagenesPorProducto(productoId: String)
+    suspend fun asociarImagenAProducto(relation: ProductImage): ProductImage
+    suspend fun desasociarImagenDeProducto(productoId: String, imagenId: Int)
 }

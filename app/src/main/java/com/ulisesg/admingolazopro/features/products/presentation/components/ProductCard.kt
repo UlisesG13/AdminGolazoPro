@@ -1,123 +1,78 @@
 package com.ulisesg.admingolazopro.features.products.presentation.components
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.ulisesg.admingolazopro.features.products.domain.entities.Product
 
+data class ProductsUiState(
+    val isLoading: Boolean = false,
+    val products: List<Product> = emptyList(),
+    val error: String? = null,
+    val isSuccess: Boolean = false
+)
+
 @Composable
 fun ProductCard(
     product: Product,
-    onEdit: (Product) -> Unit,
     onDelete: (String) -> Unit,
+    onClick: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
+
+    val image = product.imagenes.firstOrNull()
+
     Card(
         modifier = modifier
             .fillMaxWidth()
-            .padding(8.dp),
-        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
-        shape = RoundedCornerShape(16.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surface
-        )
+            .clickable { onClick(product.id) },
+        elevation = CardDefaults.cardElevation(4.dp)
     ) {
-        Row(
-            modifier = Modifier
-                .padding(12.dp)
-                .height(120.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            val imageUrl = product.imagenes.firstOrNull()?.path ?: ""
+
+        Column {
+
             AsyncImage(
-                model = imageUrl,
+                model = image?.path,
                 contentDescription = product.nombre,
                 modifier = Modifier
-                    .size(100.dp)
-                    .clip(RoundedCornerShape(12.dp)),
+                    .fillMaxWidth()
+                    .height(180.dp),
                 contentScale = ContentScale.Crop
             )
 
-            Spacer(modifier = Modifier.width(16.dp))
-
             Column(
-                modifier = Modifier
-                    .weight(1f)
-                    .fillMaxHeight(),
-                verticalArrangement = Arrangement.SpaceBetween
+                modifier = Modifier.padding(12.dp)
             ) {
-                Column {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Text(
-                            text = product.nombre,
-                            style = MaterialTheme.typography.titleMedium,
-                            fontWeight = FontWeight.Bold,
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis,
-                            modifier = Modifier.weight(1f)
-                        )
-                        if (product.esDestacado) {
-                            Icon(
-                                imageVector = Icons.Default.Star,
-                                contentDescription = "Destacado",
-                                tint = Color(0xFFFFD700),
-                                modifier = Modifier.size(20.dp)
-                            )
-                        }
-                    }
-                    Text(
-                        text = product.descripcion,
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        maxLines = 2,
-                        overflow = TextOverflow.Ellipsis
-                    )
-                }
 
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.Bottom
-                ) {
-                    Text(
-                        text = "$${product.precio}",
-                        style = MaterialTheme.typography.titleLarge,
-                        color = MaterialTheme.colorScheme.primary,
-                        fontWeight = FontWeight.ExtraBold
-                    )
-                    
-                    Row {
-                        IconButton(onClick = { onEdit(product) }) {
-                            Icon(
-                                imageVector = Icons.Default.Edit,
-                                contentDescription = "Editar",
-                                tint = MaterialTheme.colorScheme.secondary
-                            )
-                        }
-                        IconButton(onClick = { onDelete(product.id) }) {
-                            Icon(
-                                imageVector = Icons.Default.Delete,
-                                contentDescription = "Eliminar",
-                                tint = MaterialTheme.colorScheme.error
-                            )
-                        }
+                Text(
+                    text = product.nombre,
+                    style = MaterialTheme.typography.titleMedium
+                )
+
+                Spacer(modifier = Modifier.height(4.dp))
+
+                Text(
+                    text = "$${product.precio}",
+                    style = MaterialTheme.typography.bodyLarge
+                )
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                Row {
+
+                    Button(
+                        onClick = { onDelete(product.id) }
+                    ) {
+                        Text("Eliminar")
                     }
                 }
             }
         }
     }
 }
+
