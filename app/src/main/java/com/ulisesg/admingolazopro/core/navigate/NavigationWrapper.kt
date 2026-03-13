@@ -5,6 +5,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.ulisesg.admingolazopro.features.auth.presentation.screens.LoginScreen
+import com.ulisesg.admingolazopro.features.auth.presentation.screens.RegisterScreen
+import com.ulisesg.admingolazopro.features.employee.presentation.screens.EmployeesScreen
 import com.ulisesg.admingolazopro.features.home.screens.HomeScreen
 import com.ulisesg.admingolazopro.features.products.presentation.screens.ProductsScreen
 
@@ -22,23 +24,18 @@ fun NavigationWrapper() {
                 }
             )
         }
-        /*
-        -------------------------------------------------------
-        IMPORTANTE, NO EXISTE LA FUNCIONALIDAD DE CREAR CUENTA
-        - UN ADMINISTRADOR DE CREA TU CUENTA
-        - SOLO PUEDES HACER LOGIN
-        -------------------------------------------------------
+
         composable<Register> {
             RegisterScreen(
                 onNavigateBack = {
-                    navController.navigate(Employees) // Regresa a la pantalla de administracion de empleados administrativos
+                    navController.popBackStack()
                 },
                 onRegisterSuccess = {
-                    navController.navigate(Employees) // Regresa a la pantalla de administracion de empleados administrativos
+                    navController.popBackStack()
                 }
             )
         }
-        */
+
         composable<Products> {
             ProductsScreen(
                 onAddProduct = { /* aqui va la ruta tilapia manu */ },
@@ -51,6 +48,17 @@ fun NavigationWrapper() {
                 onPromotion = { navController.navigate(Promotions) },
                 onEmployee = { navController.navigate(Employees) },
                 onOrder = { navController.navigate(Orders) }
+            )
+        }
+        composable<Employees> {
+            EmployeesScreen(
+                onAddEmployee = { 
+                    navController.navigate(Register)
+                },
+                onEditEmployee = { id -> 
+                    navController.navigate(Register)
+                }
+
             )
         }
     }

@@ -1,19 +1,23 @@
 package com.ulisesg.admingolazopro.features.auth.data.datasource.remote.models
 
+import com.google.gson.annotations.SerializedName
+
 data class RegisterRequest(
-    val nombre: String,
-    val email: String,
-    val password: String
+    @SerializedName("nombre") val nombre: String,
+    @SerializedName("email") val email: String,
+    @SerializedName("password") val password: String,
+    @SerializedName("rol") val rol: String
 )
 
 data class LoginRequest(
-    val email: String,
-    val password: String
+    @SerializedName("email") val email: String,
+    @SerializedName("password") val password: String
 )
 
 data class AuthResponse(
-    val usuario_id: String,
-    val email: String,
-    val rol: String,
-    val token: String
+    @SerializedName("usuario_id") val usuario_id: String,
+    @SerializedName("nombre") val nombre: String?,
+    @SerializedName("email") val email: String,
+    @SerializedName("rol") val rol: String,
+    @SerializedName("token") val token: String?
 )

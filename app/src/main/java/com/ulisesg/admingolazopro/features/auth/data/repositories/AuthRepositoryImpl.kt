@@ -24,7 +24,8 @@ class AuthRepositoryImpl @Inject constructor(
         val request = RegisterRequest(
             nombre = user.nombre,
             email = user.email,
-            password = user.password
+            password = user.password,
+            rol = user.rol.value // Se cambió .name por .value para enviar "administrador" en lugar de "ADMINISTRADOR"
         )
         return remote.register(request).toDomain()
     }
