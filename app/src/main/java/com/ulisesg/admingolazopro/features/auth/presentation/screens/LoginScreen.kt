@@ -12,7 +12,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -32,7 +31,6 @@ import com.ulisesg.admingolazopro.features.auth.presentation.viewmodels.AuthView
 @Composable
 fun LoginScreen(
     viewModel: AuthViewModel = hiltViewModel(),
-    onNavigateToRegister: () -> Unit,
     onLoginSuccess: () -> Unit
 ) {
     val state by viewModel.state.collectAsState()
@@ -98,12 +96,6 @@ fun LoginScreen(
                 isLoading = state.isLoading,
                 onClick = { viewModel.login() }
             )
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            TextButton(onClick = onNavigateToRegister) {
-                Text("¿No tienes cuenta? Regístrate aquí")
-            }
         }
     }
 }

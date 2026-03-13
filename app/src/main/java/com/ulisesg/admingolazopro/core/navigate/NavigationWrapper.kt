@@ -5,7 +5,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.ulisesg.admingolazopro.features.auth.presentation.screens.LoginScreen
-import com.ulisesg.admingolazopro.features.auth.presentation.screens.RegisterScreen
+import com.ulisesg.admingolazopro.features.home.screens.HomeScreen
 import com.ulisesg.admingolazopro.features.products.presentation.screens.ProductsScreen
 
 @Composable
@@ -17,28 +17,40 @@ fun NavigationWrapper() {
 
         composable<Login> {
             LoginScreen(
-                onNavigateToRegister = {
-                    navController.navigate(Register)
-                },
                 onLoginSuccess = {
-                    navController.navigate(Products)
+                    navController.navigate(Home)
                 }
             )
         }
+        /*
+        -------------------------------------------------------
+        IMPORTANTE, NO EXISTE LA FUNCIONALIDAD DE CREAR CUENTA
+        - UN ADMINISTRADOR DE CREA TU CUENTA
+        - SOLO PUEDES HACER LOGIN
+        -------------------------------------------------------
         composable<Register> {
             RegisterScreen(
                 onNavigateBack = {
-                    navController.navigate(Login)
+                    navController.navigate(Employees) // Regresa a la pantalla de administracion de empleados administrativos
                 },
                 onRegisterSuccess = {
-                    navController.navigate(Products)
+                    navController.navigate(Employees) // Regresa a la pantalla de administracion de empleados administrativos
                 }
             )
         }
+        */
         composable<Products> {
             ProductsScreen(
                 onAddProduct = { /* aqui va la ruta tilapia manu */ },
                 onEditProduct = { /* aqui va la ruta bagre manu*/ }
+            )
+        }
+        composable<Home> {
+            HomeScreen(
+                onProduct = { navController.navigate(Products) },
+                onPromotion = { navController.navigate(Promotions) },
+                onEmployee = { navController.navigate(Employees) },
+                onOrder = { navController.navigate(Orders) }
             )
         }
     }

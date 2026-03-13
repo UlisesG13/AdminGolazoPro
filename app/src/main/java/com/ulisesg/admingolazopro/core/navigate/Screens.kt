@@ -10,3 +10,15 @@ object Register
 
 @Serializable
 object Products
+
+@Serializable
+object Home
+
+@Serializable
+object Employees
+
+@Serializable
+object Promotions
+
+@Serializable
+object Orders

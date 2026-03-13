@@ -10,21 +10,21 @@ import retrofit2.http.Path
 
 interface ProductsApi {
 
-    @GET("products")
+    @GET("productos")
     suspend fun getProducts(): List<ProductResponse>
 
-    @POST("products")
+    @POST("productos")
     suspend fun createProduct(
         @Body request: ProductResponse
     ): ProductResponse
 
-    @PUT("products/{id}")
+    @PUT("productos/{id}")
     suspend fun updateProduct(
         @Path("id") id: String,
         @Body request: ProductResponse
     ): ProductResponse
 
-    @DELETE("products/{id}")
+    @DELETE("productos/{id}")
     suspend fun deleteProduct(
         @Path("id") id: String
     )
