@@ -4,8 +4,11 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.toRoute
 import com.ulisesg.admingolazopro.features.auth.presentation.screens.LoginScreen
 import com.ulisesg.admingolazopro.features.auth.presentation.screens.RegisterScreen
+import com.ulisesg.admingolazopro.features.employee.presentation.screens.CreateEmployeeScreen
+import com.ulisesg.admingolazopro.features.employee.presentation.screens.EditEmployeeScreen
 import com.ulisesg.admingolazopro.features.employee.presentation.screens.EmployeesScreen
 import com.ulisesg.admingolazopro.features.home.screens.HomeScreen
 import com.ulisesg.admingolazopro.features.products.presentation.screens.ProductsScreen
@@ -53,12 +56,23 @@ fun NavigationWrapper() {
         composable<Employees> {
             EmployeesScreen(
                 onAddEmployee = { 
-                    navController.navigate(Register)
+                    navController.navigate(CreateEmployee)
                 },
                 onEditEmployee = { id -> 
-                    navController.navigate(Register)
+                    navController.navigate(EditEmployee(employeeId = id))
                 }
-
+            )
+        }
+        composable<CreateEmployee> {
+            CreateEmployeeScreen(
+                onNavigateBack = { navController.popBackStack() }
+            )
+        }
+        composable<EditEmployee> { backStackEntry ->
+            val route: EditEmployee = backStackEntry.toRoute()
+            EditEmployeeScreen(
+                employeeId = route.employeeId,
+                onNavigateBack = { navController.popBackStack() }
             )
         }
     }

@@ -18,6 +18,12 @@ object Home
 object Employees
 
 @Serializable
+object CreateEmployee
+
+@Serializable
+data class EditEmployee(val employeeId: String)
+
+@Serializable
 object Promotions
 
 @Serializable

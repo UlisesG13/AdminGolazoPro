@@ -13,7 +13,7 @@ class EmployeeRepositoryImpl @Inject constructor(
 ) : EmployeeRepository {
 
     override suspend fun getEmployees(page: Int): Result<List<Employee>> = runCatching {
-        api.getEmployees(page).toDomain()
+        api.getEmployees().toDomain()
     }
 
     override suspend fun getEmployeeById(id: String): Result<Employee> = runCatching {
