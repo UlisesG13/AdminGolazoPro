@@ -1,4 +1,4 @@
-package com.alilopez.kt_demohilt.core.hardware.domain
+package com.ulisesg.admingolazopro.core.hardware.domain
 
 interface FlashManager {
     fun turnOn()

@@ -27,4 +27,10 @@ data class EditEmployee(val employeeId: String)
 object Promotions
 
 @Serializable
+object CreatePromotion
+
+@Serializable
+data class EditPromotion(val promotionId: Int)
+
+@Serializable
 object Orders

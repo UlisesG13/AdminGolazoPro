@@ -1,4 +1,4 @@
-package com.alilopez.kt_demohilt.core.ui.theme
+package com.ulisesg.admingolazopro.core.ui.theme
 import androidx.compose.ui.graphics.Color
 
 val primaryLight = Color(0xFF904B40)
@@ -216,10 +216,3 @@ val surfaceContainerLowDarkHighContrast = Color(0xFF271D1C)
 val surfaceContainerDarkHighContrast = Color(0xFF392E2C)
 val surfaceContainerHighDarkHighContrast = Color(0xFF443937)
 val surfaceContainerHighestDarkHighContrast = Color(0xFF504442)
-
-
-
-
-
-
-

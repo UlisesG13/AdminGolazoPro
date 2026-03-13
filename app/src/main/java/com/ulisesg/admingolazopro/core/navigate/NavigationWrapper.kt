@@ -12,6 +12,9 @@ import com.ulisesg.admingolazopro.features.employee.presentation.screens.EditEmp
 import com.ulisesg.admingolazopro.features.employee.presentation.screens.EmployeesScreen
 import com.ulisesg.admingolazopro.features.home.screens.HomeScreen
 import com.ulisesg.admingolazopro.features.products.presentation.screens.ProductsScreen
+import com.ulisesg.admingolazopro.features.promotion.presentation.screens.CreatePromotionScreen
+import com.ulisesg.admingolazopro.features.promotion.presentation.screens.EditPromotionScreen
+import com.ulisesg.admingolazopro.features.promotion.presentation.screens.PromotionsScreen
 
 @Composable
 fun NavigationWrapper() {
@@ -72,6 +75,27 @@ fun NavigationWrapper() {
             val route: EditEmployee = backStackEntry.toRoute()
             EditEmployeeScreen(
                 employeeId = route.employeeId,
+                onNavigateBack = { navController.popBackStack() }
+            )
+        }
+        
+        composable<Promotions> {
+            PromotionsScreen(
+                onAddPromotion = { navController.navigate(CreatePromotion) },
+                onEditPromotion = { id -> navController.navigate(EditPromotion(promotionId = id)) }
+            )
+        }
+
+        composable<CreatePromotion> {
+            CreatePromotionScreen(
+                onNavigateBack = { navController.popBackStack() }
+            )
+        }
+
+        composable<EditPromotion> { backStackEntry ->
+            val route: EditPromotion = backStackEntry.toRoute()
+            EditPromotionScreen(
+                promotionId = route.promotionId,
                 onNavigateBack = { navController.popBackStack() }
             )
         }

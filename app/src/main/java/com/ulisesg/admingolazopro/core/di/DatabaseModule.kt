@@ -1,9 +1,9 @@
-package com.alilopez.kt_demohilt.core.di
+package com.ulisesg.admingolazopro.core.di
 
 import android.content.Context
 import androidx.room.Room
-import com.alilopez.kt_demohilt.core.database.AppDatabase
-import com.alilopez.kt_demohilt.core.database.dao.PostDao
+import com.ulisesg.admingolazopro.core.database.AppDatabase
+import com.ulisesg.admingolazopro.core.database.dao.PostDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -21,16 +21,10 @@ object DatabaseModule {
         return Room.databaseBuilder(
             context,
             AppDatabase::class.java,
-            "JsonPlaceHolderDB"
+            "AdminGolazoProDB"
         ).build()
     }
 
-    // Proveemos los DAOs individualmente
-    // Esto permite que una Feature pida solo el DAO que le interesa
-
     @Provides
     fun providePostDao(db: AppDatabase) : PostDao = db.postDao()
-
-    //@Provides
-    //fun provideUserDao(db: AppDatabase): UserDao = db.userDao()
 }

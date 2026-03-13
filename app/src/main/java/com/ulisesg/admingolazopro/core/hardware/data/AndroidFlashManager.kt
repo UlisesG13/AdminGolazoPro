@@ -1,11 +1,10 @@
-package com.alilopez.kt_demohilt.core.hardware.data
+package com.ulisesg.admingolazopro.core.hardware.data
 
 import android.content.Context
-import android.content.pm.PackageManager
 import android.hardware.camera2.CameraManager
-import com.alilopez.kt_demohilt.core.hardware.domain.FlashManager
+import com.ulisesg.admingolazopro.core.hardware.domain.FlashManager
 import dagger.hilt.android.qualifiers.ApplicationContext
-import jakarta.inject.Inject
+import javax.inject.Inject
 import kotlinx.coroutines.delay
 
 class AndroidFlashManager @Inject constructor(
@@ -27,12 +26,10 @@ class AndroidFlashManager @Inject constructor(
     override fun hasFlash(): Boolean =
         context.packageManager.hasSystemFeature(android.content.pm.PackageManager.FEATURE_CAMERA_FLASH)
 
-    // Implementación del destello (Encender -> Esperar -> Apagar)
     override suspend fun blink(durationMillis: Long) {
         if (!hasFlash()) return
-
         turnOn()
-        delay(durationMillis) // Suspensión no bloqueante
+        delay(durationMillis)
         turnOff()
     }
 
