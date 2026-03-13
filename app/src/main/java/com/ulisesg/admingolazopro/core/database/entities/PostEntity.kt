@@ -1,4 +1,4 @@
-package com.alilopez.kt_demohilt.core.database.entities
+package com.ulisesg.admingolazopro.core.database.entities
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

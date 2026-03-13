@@ -1,12 +1,12 @@
-package com.alilopez.kt_demohilt.core.di
+package com.ulisesg.admingolazopro.core.di
 
-import com.alilopez.kt_demohilt.core.hardware.data.AndroidFlashManager
-import com.alilopez.kt_demohilt.core.hardware.domain.FlashManager
+import com.ulisesg.admingolazopro.core.hardware.data.AndroidFlashManager
+import com.ulisesg.admingolazopro.core.hardware.domain.FlashManager
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import jakarta.inject.Singleton
+import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)

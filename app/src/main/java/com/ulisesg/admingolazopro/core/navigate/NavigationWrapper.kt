@@ -7,6 +7,8 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import com.ulisesg.admingolazopro.features.auth.presentation.screens.LoginScreen
 import com.ulisesg.admingolazopro.features.auth.presentation.screens.RegisterScreen
+import com.ulisesg.admingolazopro.features.employee.presentation.screens.CreateEmployeeScreen
+import com.ulisesg.admingolazopro.features.employee.presentation.screens.EditEmployeeScreen
 import com.ulisesg.admingolazopro.features.employee.presentation.screens.EmployeesScreen
 import com.ulisesg.admingolazopro.features.home.screens.HomeScreen
 import com.ulisesg.admingolazopro.features.products.presentation.screens.CreateProductScreen
@@ -14,6 +16,9 @@ import com.ulisesg.admingolazopro.features.order.presentation.screens.CustomBoxW
 import com.ulisesg.admingolazopro.features.products.presentation.screens.ProductDetailScreen
 import com.ulisesg.admingolazopro.features.products.presentation.screens.ProductsScreen
 import com.ulisesg.admingolazopro.features.promotion.presentation.screens.CustomBoxWithText as PromotionPrueba
+import com.ulisesg.admingolazopro.features.promotion.presentation.screens.CreatePromotionScreen
+import com.ulisesg.admingolazopro.features.promotion.presentation.screens.EditPromotionScreen
+import com.ulisesg.admingolazopro.features.promotion.presentation.screens.PromotionsScreen
 
 @Composable
 fun NavigationWrapper() {
@@ -79,21 +84,46 @@ fun NavigationWrapper() {
 
         composable<Employees> {
             EmployeesScreen(
-                onAddEmployee = {
-                    navController.navigate(Register)
+                onAddEmployee = { 
+                    navController.navigate(CreateEmployee)
                 },
-                onEditEmployee = { id ->
-                    navController.navigate(Register)
+                onEditEmployee = { id -> 
+                    navController.navigate(EditEmployee(employeeId = id))
                 }
+            )
+        }
+        composable<CreateEmployee> {
+            CreateEmployeeScreen(
+                onNavigateBack = { navController.popBackStack() }
+            )
+        }
+        composable<EditEmployee> { backStackEntry ->
+            val route: EditEmployee = backStackEntry.toRoute()
+            EditEmployeeScreen(
+                employeeId = route.employeeId,
+                onNavigateBack = { navController.popBackStack() }
             )
         }
 
         composable<Promotions> {
-            PromotionPrueba(text = "Pantalla de Promociones (En construcción)")
+            PromotionsScreen(
+                onAddPromotion = { navController.navigate(CreatePromotion) },
+                onEditPromotion = { id -> navController.navigate(EditPromotion(promotionId = id)) }
+            )
         }
 
-        composable<Orders> {
-            OrderPrueba(text = "Pantalla de Pedidos (En construcción)")
+        composable<CreatePromotion> {
+            CreatePromotionScreen(
+                onNavigateBack = { navController.popBackStack() }
+            )
+        }
+
+        composable<EditPromotion> { backStackEntry ->
+            val route: EditPromotion = backStackEntry.toRoute()
+            EditPromotionScreen(
+                promotionId = route.promotionId,
+                onNavigateBack = { navController.popBackStack() }
+            )
         }
     }
 }
