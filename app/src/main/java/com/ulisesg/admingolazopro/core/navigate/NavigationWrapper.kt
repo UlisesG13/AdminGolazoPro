@@ -12,10 +12,8 @@ import com.ulisesg.admingolazopro.features.employee.presentation.screens.EditEmp
 import com.ulisesg.admingolazopro.features.employee.presentation.screens.EmployeesScreen
 import com.ulisesg.admingolazopro.features.home.screens.HomeScreen
 import com.ulisesg.admingolazopro.features.products.presentation.screens.CreateProductScreen
-import com.ulisesg.admingolazopro.features.order.presentation.screens.CustomBoxWithText as OrderPrueba
 import com.ulisesg.admingolazopro.features.products.presentation.screens.ProductDetailScreen
 import com.ulisesg.admingolazopro.features.products.presentation.screens.ProductsScreen
-import com.ulisesg.admingolazopro.features.promotion.presentation.screens.CustomBoxWithText as PromotionPrueba
 import com.ulisesg.admingolazopro.features.promotion.presentation.screens.CreatePromotionScreen
 import com.ulisesg.admingolazopro.features.promotion.presentation.screens.EditPromotionScreen
 import com.ulisesg.admingolazopro.features.promotion.presentation.screens.PromotionsScreen

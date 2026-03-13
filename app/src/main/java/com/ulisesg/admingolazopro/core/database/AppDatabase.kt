@@ -2,14 +2,17 @@ package com.ulisesg.admingolazopro.core.database
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
-import com.ulisesg.admingolazopro.core.database.dao.PostDao
-import com.ulisesg.admingolazopro.core.database.entities.PostEntity
+import com.ulisesg.admingolazopro.features.products.data.datasource.local.dao.ProductDao
+import com.ulisesg.admingolazopro.features.products.data.datasource.local.entity.ProductEntity
 
 @Database(
-    entities = [PostEntity::class],
-    version = 1,
-    exportSchema = false
+    entities = [
+        ProductEntity::class
+    ],
+    version = 1
 )
 abstract class AppDatabase : RoomDatabase() {
-    abstract fun postDao(): PostDao
+
+    abstract fun productDao(): ProductDao
+
 }
