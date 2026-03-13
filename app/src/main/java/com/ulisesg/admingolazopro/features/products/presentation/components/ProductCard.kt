@@ -21,6 +21,7 @@ data class ProductsUiState(
 fun ProductCard(
     product: Product,
     onDelete: (String) -> Unit,
+    onEdit: (String) -> Unit,
     onClick: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -69,6 +70,11 @@ fun ProductCard(
                         onClick = { onDelete(product.id) }
                     ) {
                         Text("Eliminar")
+                    }
+                    Button(
+                        onClick = { onEdit(product.id) }
+                    ) {
+                        Text("Editar")
                     }
                 }
             }

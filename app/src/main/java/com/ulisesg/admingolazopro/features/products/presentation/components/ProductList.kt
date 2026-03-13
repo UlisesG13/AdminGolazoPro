@@ -11,6 +11,7 @@ import com.ulisesg.admingolazopro.features.products.domain.entities.Product
 fun ProductsList(
     products: List<Product>,
     onDelete: (String) -> Unit,
+    onEdit: (String) -> Unit,
     onProductClick: (String) -> Unit
 ) {
 
@@ -26,7 +27,8 @@ fun ProductsList(
             ProductCard(
                 product = product,
                 onDelete = onDelete,
-                onClick = onProductClick
+                onClick = onProductClick,
+                onEdit = onEdit,
             )
         }
     }

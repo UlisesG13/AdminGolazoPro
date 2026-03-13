@@ -13,7 +13,8 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-data class CreateProductUiState(
+data class EditProductUiState(
+    val id: String = "",
     val nombre: String = "",
     val precio: String = "",
     val descripcion: String = "",
@@ -23,33 +24,55 @@ data class CreateProductUiState(
     val estaDestacado: Boolean = false,
     val isLoading: Boolean = false,
     val error: String? = null,
-    val success: Boolean = false,
-    val message: String? = null
+    val success: Boolean = false
 )
 
 @HiltViewModel
-class CreateProductViewModel @Inject constructor(
+class EditProductViewModel @Inject constructor(
     private val repository: ProductsRepository,
     private val vibrator: VibratorRepository
 ) : ViewModel() {
 
-    private val _uiState = MutableStateFlow(CreateProductUiState())
-    val uiState: StateFlow<CreateProductUiState> = _uiState
+    private val _uiState = MutableStateFlow(EditProductUiState())
+    val uiState: StateFlow<EditProductUiState> = _uiState
 
-    fun updateNombre(value: String) {
-        _uiState.update { it.copy(nombre = value) }
+    fun loadProduct(id: String) {
+
+        viewModelScope.launch {
+
+            val result = repository.getProductById(id)
+
+            result?.onSuccess { product ->
+                _uiState.update {
+                    it.copy(
+                        id = product.id,
+                        nombre = product.nombre,
+                        precio = product.precio.toString(),
+                        descripcion = product.descripcion,
+                        categoriaId = product.categoriaId.toString(),
+                        estaActivo = product.estaActivo,
+                        estaDestacado = product.esDestacado,
+                        imagenes = product.imagenes.map { img -> img.path }
+                    )
+                }
+            }
+        }
     }
 
-    fun updatePrecio(value: String) {
-        _uiState.update { it.copy(precio = value) }
+    fun updateNombre(v: String) {
+        _uiState.update { it.copy(nombre = v) }
     }
 
-    fun updateDescripcion(value: String) {
-        _uiState.update { it.copy(descripcion = value) }
+    fun updatePrecio(v: String) {
+        _uiState.update { it.copy(precio = v) }
     }
 
-    fun updateCategoria(value: String) {
-        _uiState.update { it.copy(categoriaId = value) }
+    fun updateDescripcion(v: String) {
+        _uiState.update { it.copy(descripcion = v) }
+    }
+
+    fun updateCategoria(v: String) {
+        _uiState.update { it.copy(categoriaId = v) }
     }
 
     fun toggleActivo() {
@@ -71,24 +94,14 @@ class CreateProductViewModel @Inject constructor(
         }
     }
 
-    fun createProduct() {
+    fun updateProduct() {
 
         val state = _uiState.value
+        val precio = state.precio.toIntOrNull()
+        val categoriaId = state.categoriaId.toIntOrNull()
 
-        if (
-            state.nombre.isBlank() ||
-            state.precio.isBlank() ||
-            state.categoriaId.isBlank()
-        ) {
-            _uiState.update { it.copy(error = "Campos requeridos incompletos") }
-            return
-        }
-
-        val precioInt = state.precio.toIntOrNull()
-        val categoriaIdInt = state.categoriaId.toIntOrNull()
-
-        if (precioInt == null || categoriaIdInt == null) {
-            _uiState.update { it.copy(error = "Precio o Categoría ID inválidos") }
+        if (precio == null || categoriaId == null) {
+            _uiState.update { it.copy(error = "Por favor, ingrese un precio y categoría válidos") }
             return
         }
 
@@ -107,18 +120,18 @@ class CreateProductViewModel @Inject constructor(
             }
 
             val product = Product(
-                id = "",
+                id = state.id,
                 nombre = state.nombre,
-                precio = precioInt,
+                precio = precio,
                 descripcion = state.descripcion,
                 estaActivo = state.estaActivo,
                 esDestacado = state.estaDestacado,
-                categoriaId = categoriaIdInt,
+                categoriaId = categoriaId,
                 imagenes = images,
                 fechaCreacion = ""
             )
 
-            val result = repository.createProduct(product)
+            val result = repository.updateProduct(product)
 
             result.onSuccess {
                 _uiState.update {
@@ -129,11 +142,11 @@ class CreateProductViewModel @Inject constructor(
                 }
             }
 
-            result.onFailure { error ->
+            result.onFailure { e ->
                 _uiState.update {
                     it.copy(
                         isLoading = false,
-                        error = error.message
+                        error = e.message
                     )
                 }
             }

@@ -44,15 +44,17 @@ class ProductsRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getProductById(id: String): Product? {
+    override suspend fun getProductById(id: String): Result<Product>? {
         Log.d(TAG, "getProductById: id=$id")
         return try {
             val response = api.getProductById(id)
             Log.d(TAG, "getProductById: API success")
-            ProductoMapper.toDomain(response)
+            val product = ProductoMapper.toDomain(response)
+            Result.success(product)
         } catch (e: Exception) {
             Log.e(TAG, "getProductById: API error, trying local", e)
             local.getProductById(id)?.toDomain()
+            Result.failure(e)
         }
     }
 

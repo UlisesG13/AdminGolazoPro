@@ -31,10 +31,9 @@ class ProductDetailViewModel @Inject constructor(
             _uiState.update { it.copy(isLoading = true, error = null) }
             try {
                 val product = repository.getProductById(productId)
-                if (product != null) {
+
+                product?.onSuccess { product ->
                     _uiState.update { it.copy(product = product, isLoading = false) }
-                } else {
-                    _uiState.update { it.copy(error = "Producto no encontrado", isLoading = false) }
                 }
             } catch (e: Exception) {
                 _uiState.update { it.copy(error = e.message ?: "Error desconocido", isLoading = false) }

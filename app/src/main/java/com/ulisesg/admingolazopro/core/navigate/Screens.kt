@@ -18,6 +18,9 @@ data class ProductDetail(val productId: String)
 object ProductCreate
 
 @Serializable
+data class ProductEdit(val productId: String)
+
+@Serializable
 object Home
 
 @Serializable

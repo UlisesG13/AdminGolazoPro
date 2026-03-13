@@ -15,7 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.ulisesg.admingolazopro.features.promotion.presentation.components.PromotionCard
 import com.ulisesg.admingolazopro.features.promotion.presentation.viewmodels.PromotionViewModel
 
@@ -47,8 +47,12 @@ fun PromotionsScreen(
                         Icon(Icons.Default.Refresh, contentDescription = "Refrescar")
                     }
                 },
-                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.background
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.background,
+                    scrolledContainerColor = Color.Unspecified,
+                    navigationIconContentColor = Color.Unspecified,
+                    titleContentColor = Color.Unspecified,
+                    actionIconContentColor = Color.Unspecified
                 )
             )
         },

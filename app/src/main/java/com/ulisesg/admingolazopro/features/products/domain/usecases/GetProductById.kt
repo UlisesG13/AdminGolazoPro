@@ -7,5 +7,5 @@ import javax.inject.Inject
 class GetProductById @Inject constructor(
     private val repository: ProductsRepository
 ) {
-    suspend operator fun invoke(id: String): Product? = repository.getProductById(id)
+    suspend operator fun invoke(id: String): Result<Product>? = repository.getProductById(id)
 }

@@ -12,6 +12,7 @@ import com.ulisesg.admingolazopro.features.employee.presentation.screens.EditEmp
 import com.ulisesg.admingolazopro.features.employee.presentation.screens.EmployeesScreen
 import com.ulisesg.admingolazopro.features.home.screens.HomeScreen
 import com.ulisesg.admingolazopro.features.products.presentation.screens.CreateProductScreen
+import com.ulisesg.admingolazopro.features.products.presentation.screens.EditProductScreen
 import com.ulisesg.admingolazopro.features.products.presentation.screens.ProductDetailScreen
 import com.ulisesg.admingolazopro.features.products.presentation.screens.ProductsScreen
 import com.ulisesg.admingolazopro.features.promotion.presentation.screens.CreatePromotionScreen
@@ -23,7 +24,7 @@ fun NavigationWrapper() {
 
     val navController = rememberNavController()
 
-    NavHost(navController = navController, startDestination = Login) {
+    NavHost(navController = navController, startDestination = Home) {
 
         composable<Login> {
             LoginScreen(
@@ -49,7 +50,11 @@ fun NavigationWrapper() {
                 onProductClick = { id ->
                     navController.navigate(ProductDetail(productId = id))
                 },
-                onCreateProduct = { navController.navigate(ProductCreate) }
+                onCreateProduct = { navController.navigate(ProductCreate) },
+                onBack = { navController.popBackStack() },
+                onEditProduct = { id -> 
+                    navController.navigate(ProductEdit(productId = id)) 
+                }
             )
         }
 
@@ -68,6 +73,15 @@ fun NavigationWrapper() {
                 onProductCreated = {
                     navController.popBackStack()
                 }
+            )
+        }
+
+        composable<ProductEdit> { backStackEntry ->
+            val edit: ProductEdit = backStackEntry.toRoute()
+            EditProductScreen(
+                productId = edit.productId,
+                onBack = { navController.popBackStack() },
+                onProductUpdated = { navController.popBackStack() }
             )
         }
 
