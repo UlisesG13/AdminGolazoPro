@@ -26,7 +26,7 @@ fun Product.toEntity(): ProductEntity {
         categoriaId = categoriaId,
         estaActivo = estaActivo,
         esDestacado = esDestacado,
-        imagenDestacada = imagenes.firstOrNull() as String?,
+        imagenDestacada = imagenes.firstOrNull()?.path,
         fechaCreacion = fechaCreacion
     )
 }

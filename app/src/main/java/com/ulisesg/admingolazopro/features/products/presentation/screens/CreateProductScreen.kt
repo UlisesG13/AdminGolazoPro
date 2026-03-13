@@ -1,5 +1,8 @@
 package com.ulisesg.admingolazopro.features.products.presentation.screens
 
+import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -19,16 +22,15 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import com.ulisesg.admingolazopro.core.hardware.createImageUri
 import com.ulisesg.admingolazopro.features.products.presentation.viewmodels.CreateProductViewModel
-
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -38,10 +40,35 @@ fun CreateProductScreen(
 ) {
 
     val state by viewModel.uiState.collectAsState()
+    val context = LocalContext.current
 
     if (state.success) {
         onProductCreated()
     }
+
+    var cameraUri by remember { mutableStateOf<Uri?>(null) }
+
+    val galleryLauncher =
+        rememberLauncherForActivityResult(
+            ActivityResultContracts.GetContent()
+        ) { uri ->
+
+            uri?.let {
+                viewModel.addImage(it.toString())
+            }
+        }
+
+    val cameraLauncher =
+        rememberLauncherForActivityResult(
+            ActivityResultContracts.TakePicture()
+        ) { success ->
+
+            if (success) {
+                cameraUri?.let {
+                    viewModel.addImage(it.toString())
+                }
+            }
+        }
 
     Scaffold(
         topBar = {
@@ -126,15 +153,19 @@ fun CreateProductScreen(
             ) {
 
                 if (state.isLoading) {
+
                     CircularProgressIndicator(
                         modifier = Modifier.size(20.dp)
                     )
+
                 } else {
+
                     Text("Crear producto")
                 }
             }
 
             state.error?.let {
+
                 Text(
                     text = it,
                     color = MaterialTheme.colorScheme.error
@@ -143,13 +174,34 @@ fun CreateProductScreen(
 
             Spacer(Modifier.height(16.dp))
 
-            Button(
-                onClick = {
-                    TODO("Agregar imágenes usando cámara/galería")
-                },
-                modifier = Modifier.fillMaxWidth()
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                Text("Agregar imágenes")
+
+                Button(
+                    onClick = {
+                        galleryLauncher.launch("image/*")
+                    },
+                    modifier = Modifier.weight(1f)
+                ) {
+                    Text("Galería")
+                }
+
+                Button(
+                    onClick = {
+
+                        val uri = createImageUri(context)
+
+                        cameraUri = uri
+
+                        cameraLauncher.launch(uri)
+
+                    },
+                    modifier = Modifier.weight(1f)
+                ) {
+                    Text("Cámara")
+                }
             }
         }
     }
