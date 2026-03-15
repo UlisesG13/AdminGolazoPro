@@ -18,6 +18,7 @@ import com.ulisesg.admingolazopro.features.products.presentation.screens.Product
 import com.ulisesg.admingolazopro.features.promotion.presentation.screens.CreatePromotionScreen
 import com.ulisesg.admingolazopro.features.promotion.presentation.screens.EditPromotionScreen
 import com.ulisesg.admingolazopro.features.promotion.presentation.screens.PromotionsScreen
+import com.ulisesg.admingolazopro.features.order.presentation.screens.OrdersScreen
 
 @Composable
 fun NavigationWrapper() {
@@ -134,6 +135,12 @@ fun NavigationWrapper() {
             val route: EditPromotion = backStackEntry.toRoute()
             EditPromotionScreen(
                 promotionId = route.promotionId,
+                onNavigateBack = { navController.popBackStack() }
+            )
+        }
+
+        composable<Orders> {
+            OrdersScreen(
                 onNavigateBack = { navController.popBackStack() }
             )
         }
