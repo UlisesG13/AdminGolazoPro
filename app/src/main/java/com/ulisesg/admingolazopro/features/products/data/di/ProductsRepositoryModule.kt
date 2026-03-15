@@ -1,6 +1,8 @@
 package com.ulisesg.admingolazopro.features.products.data.di
 
+import com.ulisesg.admingolazopro.features.products.data.repositories.ImageRepositoryImpl
 import com.ulisesg.admingolazopro.features.products.data.repositories.ProductsRepositoryImpl
+import com.ulisesg.admingolazopro.features.products.domain.repositories.ImageRepository
 import com.ulisesg.admingolazopro.features.products.domain.repositories.ProductsRepository
 import dagger.Binds
 import dagger.Module
@@ -17,4 +19,10 @@ abstract class ProductsRepositoryModule {
     abstract fun bindProductsRepository(
         productsRepositoryImpl: ProductsRepositoryImpl
     ): ProductsRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindImageRepository(
+        imageRepositoryImpl: ImageRepositoryImpl
+    ): ImageRepository
 }

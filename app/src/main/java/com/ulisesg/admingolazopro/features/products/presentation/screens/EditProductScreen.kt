@@ -1,6 +1,9 @@
 package com.ulisesg.admingolazopro.features.products.presentation.screens
 
+import android.Manifest
+import android.content.pm.PackageManager
 import android.net.Uri
+import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
@@ -38,6 +41,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.core.content.ContextCompat
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.ulisesg.admingolazopro.core.hardware.createImageUri
 import com.ulisesg.admingolazopro.features.products.presentation.viewmodels.EditProductViewModel
@@ -81,6 +85,18 @@ fun EditProductScreen(
                 }
             }
         }
+
+    val permissionLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { isGranted ->
+        if (isGranted) {
+            val uri = createImageUri(context)
+            cameraUri = uri
+            cameraLauncher.launch(uri)
+        } else {
+            Toast.makeText(context, "Permiso de cámara denegado", Toast.LENGTH_SHORT).show()
+        }
+    }
 
     Scaffold(
 
@@ -209,13 +225,14 @@ fun EditProductScreen(
 
                 Button(
                     onClick = {
-
-                        val uri = createImageUri(context)
-
-                        cameraUri = uri
-
-                        cameraLauncher.launch(uri)
-
+                        val permissionCheckResult = ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA)
+                        if (permissionCheckResult == PackageManager.PERMISSION_GRANTED) {
+                            val uri = createImageUri(context)
+                            cameraUri = uri
+                            cameraLauncher.launch(uri)
+                        } else {
+                            permissionLauncher.launch(Manifest.permission.CAMERA)
+                        }
                     },
                     modifier = Modifier.weight(1f)
                 ) {

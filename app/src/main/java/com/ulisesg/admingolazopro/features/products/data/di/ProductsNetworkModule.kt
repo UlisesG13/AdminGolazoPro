@@ -1,5 +1,6 @@
 package com.ulisesg.admingolazopro.features.products.data.di
 
+import com.ulisesg.admingolazopro.features.products.data.datasource.remote.api.ImagesApi
 import com.ulisesg.admingolazopro.features.products.data.datasource.remote.api.ProductsApi
 import dagger.Module
 import dagger.Provides
@@ -16,5 +17,11 @@ object ProductsNetworkModule {
     @Singleton
     fun provideProductsApi(retrofit: Retrofit): ProductsApi {
         return retrofit.create(ProductsApi::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideImagesApi(retrofit: Retrofit): ImagesApi {
+        return retrofit.create(ImagesApi::class.java)
     }
 }

@@ -24,6 +24,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.ulisesg.admingolazopro.features.products.domain.entities.Product
+import com.ulisesg.admingolazopro.features.products.presentation.components.StatusBadge
 import com.ulisesg.admingolazopro.features.products.presentation.viewmodels.ProductDetailViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -173,16 +174,3 @@ fun ProductDetailContent(product: Product) {
     }
 }
 
-@Composable
-fun StatusBadge(label: String, containerColor: Color) {
-    Surface(
-        color = containerColor,
-        shape = RoundedCornerShape(16.dp)
-    ) {
-        Text(
-            text = label,
-            modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp),
-            style = MaterialTheme.typography.labelLarge
-        )
-    }
-}
