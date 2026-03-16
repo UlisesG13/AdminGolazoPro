@@ -1,13 +1,19 @@
 package com.ulisesg.admingolazopro.features.home.screens
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ListAlt
+import androidx.compose.material.icons.filled.Badge
+import androidx.compose.material.icons.filled.Inventory
+import androidx.compose.material.icons.filled.LocalOffer
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.ulisesg.admingolazopro.features.home.components.HomeOptionCard
 
@@ -18,48 +24,60 @@ fun HomeScreen(
     onEmployee: () -> Unit,
     onOrder: () -> Unit
 ) {
+    Scaffold(
+        containerColor = MaterialTheme.colorScheme.background
+    ) { padding ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(padding)
+                .verticalScroll(rememberScrollState())
+                .padding(24.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            Spacer(modifier = Modifier.height(16.dp))
+            
+            Text(
+                text = "AdminGolazo Pro",
+                style = MaterialTheme.typography.displaySmall,
+                fontWeight = FontWeight.Black,
+                color = MaterialTheme.colorScheme.primary
+            )
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
-        verticalArrangement = Arrangement.Top
-    ) {
+            Text(
+                text = "Panel de control empresarial",
+                style = MaterialTheme.typography.bodyLarge,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier.padding(bottom = 24.dp)
+            )
 
-        Text(
-            text = "Panel de administración",
-            modifier = Modifier.padding(bottom = 16.dp)
-        )
+            HomeOptionCard(
+                title = "Productos",
+                description = "Administra el inventario y catálogo",
+                icon = Icons.Default.Inventory,
+                onClick = onProduct
+            )
 
-        HomeOptionCard(
-            title = "Gestionar productos",
-            onClick = { onProduct() }
-        )
+            HomeOptionCard(
+                title = "Promociones",
+                description = "Gestiona descuentos y ofertas",
+                icon = Icons.Default.LocalOffer,
+                onClick = onPromotion
+            )
 
-        HomeOptionCard(
-            title = "Gestionar promociones",
-            onClick = { onPromotion() }
-        )
+            HomeOptionCard(
+                title = "Empleados",
+                description = "Control de personal y roles",
+                icon = Icons.Default.Badge,
+                onClick = onEmployee
+            )
 
-        HomeOptionCard(
-            title = "Gestionar empleados",
-            onClick = { onEmployee() }
-        )
-
-        HomeOptionCard(
-            title = "Ver pedidos",
-            onClick = { onOrder() }
-        )
+            HomeOptionCard(
+                title = "Órdenes",
+                description = "Seguimiento de pedidos en tiempo real",
+                icon = Icons.AutoMirrored.Filled.ListAlt,
+                onClick = onOrder
+            )
+        }
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun HomeScreenPreview() {
-    HomeScreen(
-        onProduct = {},
-        onPromotion = {},
-        onEmployee = {},
-        onOrder = {}
-    )
 }

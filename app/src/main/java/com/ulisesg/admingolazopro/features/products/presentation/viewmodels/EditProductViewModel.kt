@@ -37,10 +37,10 @@ class EditProductViewModel @Inject constructor(
     val uiState: StateFlow<EditProductUiState> = _uiState
 
     fun loadProduct(id: String) {
-
         viewModelScope.launch {
-
+            _uiState.update { it.copy(isLoading = true) }
             val result = repository.getProductById(id)
+            _uiState.update { it.copy(isLoading = false) }
 
             result?.onSuccess { product ->
                 _uiState.update {
@@ -59,66 +59,34 @@ class EditProductViewModel @Inject constructor(
         }
     }
 
-    fun updateNombre(v: String) {
-        _uiState.update { it.copy(nombre = v) }
-    }
-
-    fun updatePrecio(v: String) {
-        _uiState.update { it.copy(precio = v) }
-    }
-
-    fun updateDescripcion(v: String) {
-        _uiState.update { it.copy(descripcion = v) }
-    }
-
-    fun updateCategoria(v: String) {
-        _uiState.update { it.copy(categoriaId = v) }
-    }
-
-    fun toggleActivo() {
-        _uiState.update { it.copy(estaActivo = !it.estaActivo) }
-    }
-
-    fun toggleDestacado() {
-        _uiState.update { it.copy(estaDestacado = !it.estaDestacado) }
-    }
+    fun updateNombre(v: String) = _uiState.update { it.copy(nombre = v) }
+    fun updatePrecio(v: String) = _uiState.update { it.copy(precio = v) }
+    fun updateDescripcion(v: String) = _uiState.update { it.copy(descripcion = v) }
+    fun updateCategoria(v: String) = _uiState.update { it.copy(categoriaId = v) }
+    fun toggleActivo() = _uiState.update { it.copy(estaActivo = !it.estaActivo) }
+    fun toggleDestacado() = _uiState.update { it.copy(estaDestacado = !it.estaDestacado) }
 
     fun addImage(uri: String) {
-
         vibrator.vibrate(40)
+        _uiState.update { it.copy(imagenes = it.imagenes + uri) }
+    }
 
-        _uiState.update {
-            it.copy(
-                imagenes = it.imagenes + uri
-            )
-        }
+    fun removeImage(uri: String) {
+        _uiState.update { it.copy(imagenes = it.imagenes - uri) }
     }
 
     fun updateProduct() {
-
         val state = _uiState.value
         val precio = state.precio.toIntOrNull()
         val categoriaId = state.categoriaId.toIntOrNull()
 
         if (precio == null || categoriaId == null) {
-            _uiState.update { it.copy(error = "Por favor, ingrese un precio y categoría válidos") }
+            _uiState.update { it.copy(error = "Datos inválidos") }
             return
         }
 
         viewModelScope.launch {
-
             _uiState.update { it.copy(isLoading = true, error = null) }
-
-            val images = state.imagenes.mapIndexed { index, uri ->
-
-                Image(
-                    id = 0,
-                    path = uri,
-                    orden = index,
-                    bytes = null
-                )
-            }
-
             val product = Product(
                 id = state.id,
                 nombre = state.nombre,
@@ -127,29 +95,12 @@ class EditProductViewModel @Inject constructor(
                 estaActivo = state.estaActivo,
                 esDestacado = state.estaDestacado,
                 categoriaId = categoriaId,
-                imagenes = images,
+                imagenes = state.imagenes.mapIndexed { i, p -> Image(0, p, i, null) },
                 fechaCreacion = ""
             )
-
-            val result = repository.updateProduct(product)
-
-            result.onSuccess {
-                _uiState.update {
-                    it.copy(
-                        isLoading = false,
-                        success = true
-                    )
-                }
-            }
-
-            result.onFailure { e ->
-                _uiState.update {
-                    it.copy(
-                        isLoading = false,
-                        error = e.message
-                    )
-                }
-            }
+            repository.updateProduct(product)
+                .onSuccess { _uiState.update { it.copy(isLoading = false, success = true) } }
+                .onFailure { e -> _uiState.update { it.copy(isLoading = false, error = e.message) } }
         }
     }
 }
