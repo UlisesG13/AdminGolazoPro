@@ -1,7 +1,6 @@
 package com.ulisesg.admingolazopro.features.auth.presentation.screens
 
 import android.util.Log
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
@@ -16,7 +15,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -29,7 +27,8 @@ import com.ulisesg.admingolazopro.features.auth.presentation.viewmodels.AuthView
 @Composable
 fun LoginScreen(
     viewModel: AuthViewModel = hiltViewModel(),
-    onLoginSuccess: () -> Unit
+    onLoginSuccess: () -> Unit,
+    onRegister: () -> Unit
 ) {
     val state by viewModel.state.collectAsState()
     val snackbarHostState = remember { SnackbarHostState() }
@@ -62,7 +61,6 @@ fun LoginScreen(
         ) {
             Spacer(modifier = Modifier.height(48.dp))
             
-            // App Logo Placeholder
             Surface(
                 modifier = Modifier.size(100.dp),
                 color = MaterialTheme.colorScheme.primaryContainer,
@@ -121,12 +119,24 @@ fun LoginScreen(
             
             Spacer(modifier = Modifier.height(24.dp))
             
-            TextButton(onClick = { /* Implementar recuperación */ }) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
                 Text(
-                    "¿Olvidaste tu contraseña?",
-                    style = MaterialTheme.typography.labelLarge,
-                    color = MaterialTheme.colorScheme.primary
+                    text = "¿No tienes cuenta?",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
+                TextButton(onClick = onRegister) {
+                    Text(
+                        "Regístrate",
+                        style = MaterialTheme.typography.labelLarge,
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.primary
+                    )
+                }
             }
             
             Spacer(modifier = Modifier.height(48.dp))

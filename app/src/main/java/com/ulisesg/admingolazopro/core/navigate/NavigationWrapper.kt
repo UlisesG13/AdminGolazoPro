@@ -25,12 +25,19 @@ fun NavigationWrapper() {
 
     val navController = rememberNavController()
 
-    NavHost(navController = navController, startDestination = Home) {
+    // Configuramos Login como la pantalla inicial obligatoria
+    NavHost(navController = navController, startDestination = Login) {
 
         composable<Login> {
             LoginScreen(
                 onLoginSuccess = {
-                    navController.navigate(Home)
+                    navController.navigate(Home) {
+                        // Evita que el usuario regrese al Login al presionar atrás
+                        popUpTo(Login) { inclusive = true }
+                    }
+                },
+                onRegister = {
+                    navController.navigate(Register)
                 }
             )
         }
@@ -41,8 +48,18 @@ fun NavigationWrapper() {
                     navController.popBackStack()
                 },
                 onRegisterSuccess = {
+                    // Después de registrarse, regresamos al login o directo al home
                     navController.popBackStack()
                 }
+            )
+        }
+
+        composable<Home> {
+            HomeScreen(
+                onProduct = { navController.navigate(Products) },
+                onPromotion = { navController.navigate(Promotions) },
+                onEmployee = { navController.navigate(Employees) },
+                onOrder = { navController.navigate(Orders) }
             )
         }
 
@@ -86,15 +103,6 @@ fun NavigationWrapper() {
             )
         }
 
-        composable<Home> {
-            HomeScreen(
-                onProduct = { navController.navigate(Products) },
-                onPromotion = { navController.navigate(Promotions) },
-                onEmployee = { navController.navigate(Employees) },
-                onOrder = { navController.navigate(Orders) }
-            )
-        }
-
         composable<Employees> {
             EmployeesScreen(
                 onAddEmployee = { 
@@ -105,11 +113,13 @@ fun NavigationWrapper() {
                 }
             )
         }
+
         composable<CreateEmployee> {
             CreateEmployeeScreen(
                 onNavigateBack = { navController.popBackStack() }
             )
         }
+
         composable<EditEmployee> { backStackEntry ->
             val route: EditEmployee = backStackEntry.toRoute()
             EditEmployeeScreen(
