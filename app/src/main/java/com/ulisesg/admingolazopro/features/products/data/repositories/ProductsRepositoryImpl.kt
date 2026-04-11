@@ -5,6 +5,7 @@ import com.ulisesg.admingolazopro.features.products.data.datasource.local.Produc
 import com.ulisesg.admingolazopro.features.products.data.datasource.local.mapper.toDomain
 import com.ulisesg.admingolazopro.features.products.data.datasource.local.mapper.toEntity
 import com.ulisesg.admingolazopro.features.products.data.datasource.remote.api.ProductsApi
+import com.ulisesg.admingolazopro.features.products.data.datasource.remote.mapper.CategoriaMapper
 import com.ulisesg.admingolazopro.features.products.data.datasource.remote.mapper.ProductMapper
 import com.ulisesg.admingolazopro.features.products.domain.entities.Category
 import com.ulisesg.admingolazopro.features.products.domain.entities.Product
@@ -108,7 +109,11 @@ class ProductsRepositoryImpl @Inject constructor(
 
     override suspend fun getCategorias(): List<Category> {
         return try {
-            api.getCategorias().map { Category(it.categoria_id, it.nombre, it.categoria_id) }
+            val response = api.getCategorias()
+            Log.d(TAG, "getCategorias: $response")
+            response.map {
+                CategoriaMapper.toDomain(it)
+            }
         } catch (e: Exception) {
             Log.e(TAG, "getCategorias: Error", e)
             emptyList()
