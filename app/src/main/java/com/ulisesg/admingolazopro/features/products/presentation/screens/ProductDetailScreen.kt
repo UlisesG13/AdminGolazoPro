@@ -1,7 +1,8 @@
 package com.ulisesg.admingolazopro.features.products.presentation.screens
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
@@ -16,8 +17,8 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -35,12 +36,14 @@ fun ProductDetailScreen(
     onNavigateBack: () -> Unit
 ) {
     val state by viewModel.uiState.collectAsState()
+    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
 
     LaunchedEffect(productId) {
         viewModel.loadProduct(productId)
     }
 
     Scaffold(
+        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             TopAppBar(
                 title = { Text("Detalle del Producto") },
@@ -48,7 +51,8 @@ fun ProductDetailScreen(
                     IconButton(onClick = onNavigateBack) {
                         Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Atrás")
                     }
-                }
+                },
+                scrollBehavior = scrollBehavior
             )
         }
     ) { paddingValues ->
@@ -74,6 +78,7 @@ fun ProductDetailScreen(
     }
 }
 
+@OptIn(ExperimentalLayoutApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun ProductDetailContent(product: Product, categoryName: String?) {
     Column(
@@ -87,32 +92,37 @@ fun ProductDetailContent(product: Product, categoryName: String?) {
             LazyRow(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(250.dp),
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    .height(300.dp),
+                horizontalArrangement = Arrangement.spacedBy(12.dp)
             ) {
                 items(product.imagenes) { image ->
-                    AsyncImage(
-                        model = image.path,
-                        contentDescription = "Imagen de ${product.nombre}",
-                        modifier = Modifier
-                            .width(300.dp)
-                            .fillMaxHeight()
-                            .clip(RoundedCornerShape(12.dp)),
-                        contentScale = ContentScale.Crop
-                    )
+                    Card(
+                        shape = RoundedCornerShape(16.dp),
+                        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+                    ) {
+                        AsyncImage(
+                            model = image.path,
+                            contentDescription = "Imagen de ${product.nombre}",
+                            modifier = Modifier
+                                .width(320.dp)
+                                .fillMaxHeight(),
+                            contentScale = ContentScale.Crop
+                        )
+                    }
                 }
             }
         } else {
             // Imagen por defecto si no hay imágenes
-            Box(
+            Surface(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(200.dp)
-                    .clip(RoundedCornerShape(12.dp))
-                    .background(MaterialTheme.colorScheme.surfaceVariant),
-                contentAlignment = Alignment.Center
+                    .height(200.dp),
+                shape = RoundedCornerShape(16.dp),
+                color = MaterialTheme.colorScheme.surfaceVariant
             ) {
-                Text("Sin imágenes disponibles")
+                Box(contentAlignment = Alignment.Center) {
+                    Text("Sin imágenes disponibles", style = MaterialTheme.typography.bodyLarge)
+                }
             }
         }
 
@@ -122,54 +132,116 @@ fun ProductDetailContent(product: Product, categoryName: String?) {
         Text(
             text = product.nombre,
             style = MaterialTheme.typography.headlineMedium,
-            fontWeight = FontWeight.Bold
+            fontWeight = FontWeight.Bold,
+            color = MaterialTheme.colorScheme.onSurface
         )
 
         Text(
             text = "$${product.precio}",
             style = MaterialTheme.typography.headlineSmall,
             color = MaterialTheme.colorScheme.primary,
-            fontWeight = FontWeight.SemiBold
+            fontWeight = FontWeight.Bold
         )
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(24.dp))
 
         Text(
             text = "Descripción",
             style = MaterialTheme.typography.titleLarge,
-            fontWeight = FontWeight.Bold
+            fontWeight = FontWeight.Bold,
+            color = MaterialTheme.colorScheme.onSurface
         )
 
         Text(
             text = product.descripcion,
             style = MaterialTheme.typography.bodyLarge,
-            modifier = Modifier.padding(top = 8.dp)
+            modifier = Modifier.padding(top = 8.dp),
+            color = MaterialTheme.colorScheme.onSurfaceVariant
         )
+
+        if (product.tallas.isNotEmpty()) {
+            Spacer(modifier = Modifier.height(24.dp))
+            Text(
+                text = "Tallas Disponibles",
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.Bold
+            )
+            FlowRow(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 8.dp),
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                product.tallas.forEach { talla ->
+                    AssistChip(
+                        onClick = { },
+                        label = { Text(talla.nombre) },
+                        colors = AssistChipDefaults.assistChipColors(
+                            containerColor = MaterialTheme.colorScheme.secondaryContainer,
+                            labelColor = MaterialTheme.colorScheme.onSecondaryContainer
+                        )
+                    )
+                }
+            }
+        }
+
+        if (product.colores.isNotEmpty()) {
+            Spacer(modifier = Modifier.height(24.dp))
+            Text(
+                text = "Colores Disponibles",
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.Bold
+            )
+            FlowRow(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 8.dp),
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                product.colores.forEach { color ->
+                    AssistChip(
+                        onClick = { },
+                        label = { Text(color.nombre) },
+                        colors = AssistChipDefaults.assistChipColors(
+                            containerColor = MaterialTheme.colorScheme.tertiaryContainer,
+                            labelColor = MaterialTheme.colorScheme.onTertiaryContainer
+                        )
+                    )
+                }
+            }
+        }
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        // Estados (Destacado / Activo)
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(16.dp)
-        ) {
-            StatusBadge(
-                label = if (product.esDestacado) "Destacado" else "Normal",
-                containerColor = if (product.esDestacado) MaterialTheme.colorScheme.tertiaryContainer else MaterialTheme.colorScheme.surfaceVariant
-            )
+        HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
 
-            StatusBadge(
-                label = if (product.estaActivo) "Activo" else "Inactivo",
-                containerColor = if (product.estaActivo) Color(0xFFC8E6C9) else Color(0xFFFFCDD2)
-            )
-        }
-        
-        Spacer(modifier = Modifier.height(16.dp))
-        
-        Text(
-            text = "Categoría: ${categoryName ?: "Desconocida (ID: ${product.categoriaId})"}",
-            style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.outline
+        ListItem(
+            headlineContent = { Text("Categoría", fontWeight = FontWeight.Bold) },
+            supportingContent = { Text(categoryName ?: "Desconocida (ID: ${product.categoriaId})") },
+            colors = ListItemDefaults.colors(containerColor = Color.Transparent)
+        )
+
+        ListItem(
+            headlineContent = { Text("Estado del Producto", fontWeight = FontWeight.Bold) },
+            supportingContent = {
+                Row(
+                    modifier = Modifier.padding(top = 8.dp),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    StatusBadge(
+                        label = if (product.esDestacado) "Destacado" else "Normal",
+                        containerColor = if (product.esDestacado) MaterialTheme.colorScheme.tertiaryContainer else MaterialTheme.colorScheme.surfaceVariant
+                    )
+
+                    StatusBadge(
+                        label = if (product.estaActivo) "Activo" else "Inactivo",
+                        containerColor = if (product.estaActivo) Color(0xFFC8E6C9) else Color(0xFFFFCDD2)
+                    )
+                }
+            },
+            colors = ListItemDefaults.colors(containerColor = Color.Transparent)
         )
     }
 }

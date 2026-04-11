@@ -5,7 +5,7 @@ import com.ulisesg.admingolazopro.features.products.data.datasource.remote.model
 import com.ulisesg.admingolazopro.features.products.data.datasource.remote.models.ProductoUpdateRequest
 import com.ulisesg.admingolazopro.features.products.domain.entities.Product
 
-object ProductoMapper {
+object ProductMapper {
 
     fun toDomain(dto: ProductoResponse): Product {
 
@@ -13,8 +13,16 @@ object ProductoMapper {
             ImageMapper.toDomain(it)
         }
 
+        val tallas = dto.tallas.map {
+            TallaMapper.toDomain(it)
+        }
+
+        val colores = dto.colores.map {
+            ColorMapper.toDomain(it)
+        }
+        
         return Product(
-            id = dto.producto_id ?: "",
+            id = dto.producto_id,
             nombre = dto.nombre,
             precio = dto.precio,
             descripcion = dto.descripcion ?: "",
@@ -22,7 +30,9 @@ object ProductoMapper {
             esDestacado = dto.esta_destacado,
             categoriaId = dto.categoria_id,
             fechaCreacion = dto.fecha_creacion,
-            imagenes = images
+            imagenes = images,
+            tallas = tallas,
+            colores = colores
         )
     }
 

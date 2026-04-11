@@ -11,7 +11,7 @@ plugins {
 
 android {
     namespace = "com.ulisesg.admingolazopro"
-    compileSdk = 26
+    compileSdk = 36
 
 
     defaultConfig {

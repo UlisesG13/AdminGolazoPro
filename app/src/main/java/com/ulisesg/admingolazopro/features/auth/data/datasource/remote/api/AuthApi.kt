@@ -13,7 +13,7 @@ interface AuthApi {
         @Body request: LoginRequest
     ): AuthResponse
 
-    @POST("users/admin")
+    @POST("users/admins")
     suspend fun register(
         @Body request: RegisterRequest
     ): AuthResponse

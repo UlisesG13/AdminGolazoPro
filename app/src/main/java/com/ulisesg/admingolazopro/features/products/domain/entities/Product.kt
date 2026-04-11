@@ -6,6 +6,8 @@ data class Product(
     val descripcion: String,
     val precio: Int,
     val imagenes: List<Image> = emptyList(),
+    val tallas: List<Talla> = emptyList(),
+    val colores: List<Color> = emptyList(),
     val esDestacado: Boolean = false,
     val estaActivo: Boolean = true,
     val fechaCreacion: String = "",

@@ -14,47 +14,47 @@ import retrofit2.http.Query
 
 interface ProductsApi {
 
-    @GET("productos/")
+    @GET("productos")
     suspend fun getProducts(): List<ProductoResponse>
 
-    @GET("productos/{id}/")
+    @GET("productos/{id}")
     suspend fun getProductById(
         @Path("id") id: String
     ): ProductoResponse
 
-    @GET("productos/by-categoria/{categoriaId}/")
+    @GET("productos/by-categoria/{categoriaId}")
     suspend fun getProductsByCategoria(
         @Path("categoriaId") categoriaId: Int
     ): List<ProductoResponse>
 
-    @POST("productos/")
+    @POST("productos")
     suspend fun createProduct(
         @Body request: ProductoCreateRequest
     ): ProductoResponse
 
-    @PUT("productos/{id}/")
+    @PUT("productos/{id}")
     suspend fun updateProduct(
         @Path("id") id: String,
         @Body request: ProductoUpdateRequest
     ): ProductoResponse
 
-    @PUT("productos/{id}/alter-destacado/")
+    @PUT("productos/{id}/alter-destacado")
     suspend fun changeDestacado(
         @Path("id") id: String,
         @Query("destacado") destacado: Boolean
     ): ProductoResponse
 
-    @PUT("productos/{id}/alter-status/")
+    @PUT("productos/{id}/alter-status")
     suspend fun changeStatus(
         @Path("id") id: String,
         @Query("status") status: Boolean
     ): ProductoResponse
 
-    @DELETE("productos/{id}/")
+    @DELETE("productos/{id}")
     suspend fun deleteProduct(
         @Path("id") id: String
     )
 
-    @GET("categorias/")
+    @GET("categorias")
     suspend fun getCategorias(): List<CategoriaResponse>
 }

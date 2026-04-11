@@ -5,7 +5,7 @@ import com.ulisesg.admingolazopro.features.products.data.datasource.local.Produc
 import com.ulisesg.admingolazopro.features.products.data.datasource.local.mapper.toDomain
 import com.ulisesg.admingolazopro.features.products.data.datasource.local.mapper.toEntity
 import com.ulisesg.admingolazopro.features.products.data.datasource.remote.api.ProductsApi
-import com.ulisesg.admingolazopro.features.products.data.datasource.remote.mapper.ProductoMapper
+import com.ulisesg.admingolazopro.features.products.data.datasource.remote.mapper.ProductMapper
 import com.ulisesg.admingolazopro.features.products.domain.entities.Category
 import com.ulisesg.admingolazopro.features.products.domain.entities.Product
 import com.ulisesg.admingolazopro.features.products.domain.repositories.ProductsRepository
@@ -22,7 +22,7 @@ class ProductsRepositoryImpl @Inject constructor(
         val localProducts = local.getProducts().map { it.toDomain() }
         return try {
             val response = api.getProducts()
-            val remoteProducts = response.map { ProductoMapper.toDomain(it) }
+            val remoteProducts = response.map { ProductMapper.toDomain(it) }
             local.clearProducts()
             local.insertProducts(remoteProducts.map { it.toEntity() })
             remoteProducts
@@ -34,7 +34,7 @@ class ProductsRepositoryImpl @Inject constructor(
     override suspend fun getProductById(id: String): Result<Product> {
         return try {
             val response = api.getProductById(id)
-            val product = ProductoMapper.toDomain(response)
+            val product = ProductMapper.toDomain(response)
             Result.success(product)
         } catch (e: Exception) {
             local.getProductById(id)?.toDomain()?.let { Result.success(it) } ?: Result.failure(e)
@@ -43,9 +43,9 @@ class ProductsRepositoryImpl @Inject constructor(
 
     override suspend fun createProduct(product: Product): Result<Product> {
         return try {
-            val request = ProductoMapper.toCreateRequest(product)
+            val request = ProductMapper.toCreateRequest(product)
             val response = api.createProduct(request)
-            val createdProduct = ProductoMapper.toDomain(response)
+            val createdProduct = ProductMapper.toDomain(response)
             local.insertProducts(listOf(createdProduct.toEntity()))
             Result.success(createdProduct)
         } catch (e: Exception) {
@@ -55,9 +55,9 @@ class ProductsRepositoryImpl @Inject constructor(
 
     override suspend fun updateProduct(product: Product): Result<Product> {
         return try {
-            val request = ProductoMapper.toUpdateRequest(product)
+            val request = ProductMapper.toUpdateRequest(product)
             val response = api.updateProduct(id = product.id, request = request)
-            val updatedProduct = ProductoMapper.toDomain(response)
+            val updatedProduct = ProductMapper.toDomain(response)
             local.insertProducts(listOf(updatedProduct.toEntity()))
             Result.success(updatedProduct)
         } catch (e: Exception) {
@@ -78,7 +78,7 @@ class ProductsRepositoryImpl @Inject constructor(
     override suspend fun changeDestacado(id: String, destacado: Boolean): Result<Product> {
         return try {
             val response = api.changeDestacado(id = id, destacado = destacado)
-            val updatedProduct = ProductoMapper.toDomain(response)
+            val updatedProduct = ProductMapper.toDomain(response)
             local.insertProducts(listOf(updatedProduct.toEntity()))
             Result.success(updatedProduct)
         } catch (e: Exception) {
@@ -89,7 +89,7 @@ class ProductsRepositoryImpl @Inject constructor(
     override suspend fun changeStatus(id: String, status: Boolean): Result<Product> {
         return try {
             val response = api.changeStatus(id = id, status = status)
-            val updatedProduct = ProductoMapper.toDomain(response)
+            val updatedProduct = ProductMapper.toDomain(response)
             local.insertProducts(listOf(updatedProduct.toEntity()))
             Result.success(updatedProduct)
         } catch (e: Exception) {
@@ -100,7 +100,7 @@ class ProductsRepositoryImpl @Inject constructor(
     override suspend fun getProductsByCategoria(categoriaId: Int): List<Product> {
         return try {
             val response = api.getProductsByCategoria(categoriaId)
-            response.map { ProductoMapper.toDomain(it) }
+            response.map { ProductMapper.toDomain(it) }
         } catch (e: Exception) {
             local.getProducts().filter { it.categoriaId == categoriaId }.map { it.toDomain() }
         }
