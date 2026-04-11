@@ -1,5 +1,6 @@
 package com.ulisesg.admingolazopro.features.products.data.datasource.remote.api
 
+import com.ulisesg.admingolazopro.features.products.data.datasource.remote.models.CategoriaResponse
 import com.ulisesg.admingolazopro.features.products.data.datasource.remote.models.ProductoCreateRequest
 import com.ulisesg.admingolazopro.features.products.data.datasource.remote.models.ProductoResponse
 import com.ulisesg.admingolazopro.features.products.data.datasource.remote.models.ProductoUpdateRequest
@@ -53,4 +54,7 @@ interface ProductsApi {
     suspend fun deleteProduct(
         @Path("id") id: String
     )
+
+    @GET("categorias/")
+    suspend fun getCategorias(): List<CategoriaResponse>
 }

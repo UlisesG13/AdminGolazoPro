@@ -67,7 +67,7 @@ fun ProductDetailScreen(
                 )
             } else {
                 state.product?.let { product ->
-                    ProductDetailContent(product)
+                    ProductDetailContent(product, state.categoryName)
                 }
             }
         }
@@ -75,7 +75,7 @@ fun ProductDetailScreen(
 }
 
 @Composable
-fun ProductDetailContent(product: Product) {
+fun ProductDetailContent(product: Product, categoryName: String?) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -167,10 +167,9 @@ fun ProductDetailContent(product: Product) {
         Spacer(modifier = Modifier.height(16.dp))
         
         Text(
-            text = "Categoría ID: ${product.categoriaId}",
+            text = "Categoría: ${categoryName ?: "Desconocida (ID: ${product.categoriaId})"}",
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.outline
         )
     }
 }
-

@@ -128,15 +128,40 @@ fun CreateProductScreen(
                         prefix = { Text("$ ") }
                     )
 
-                    OutlinedTextField(
-                        value = state.categoriaId,
-                        onValueChange = viewModel::updateCategoria,
-                        label = { Text("ID Categoría") },
-                        modifier = Modifier.weight(1f),
-                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                        shape = RoundedCornerShape(16.dp),
-                        supportingText = { Text("Usa un ID válido") }
-                    )
+                    var expanded by remember { mutableStateOf(false) }
+                    val selectedCategory = state.categorias.find { it.categoria_id.toString() == state.categoriaId }
+
+                    ExposedDropdownMenuBox(
+                        expanded = expanded,
+                        onExpandedChange = { expanded = !expanded },
+                        modifier = Modifier.weight(1f)
+                    ) {
+                        OutlinedTextField(
+                            value = selectedCategory?.nombre ?: "Seleccionar",
+                            onValueChange = {},
+                            readOnly = true,
+                            label = { Text("Categoría") },
+                            trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
+                            modifier = Modifier.menuAnchor(),
+                            shape = RoundedCornerShape(16.dp),
+                            colors = ExposedDropdownMenuDefaults.outlinedTextFieldColors()
+                        )
+
+                        ExposedDropdownMenu(
+                            expanded = expanded,
+                            onDismissRequest = { expanded = false }
+                        ) {
+                            state.categorias.forEach { categoria ->
+                                DropdownMenuItem(
+                                    text = { Text(categoria.nombre) },
+                                    onClick = {
+                                        viewModel.updateCategoria(categoria.categoria_id.toString())
+                                        expanded = false
+                                    }
+                                )
+                            }
+                        }
+                    }
                 }
 
                 Row(
@@ -218,7 +243,7 @@ fun CreateProductScreen(
                         Icon(Icons.Default.Error, contentDescription = null, tint = MaterialTheme.colorScheme.error)
                         Spacer(Modifier.width(12.dp))
                         Text(
-                            text = if (it.contains("categoria_id")) "Error: El ID de Categoría no existe." else it,
+                            text = if (it.contains("categoria_id")) "Error: La categoría seleccionada no es válida." else it,
                             style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.onErrorContainer
                         )
@@ -230,7 +255,7 @@ fun CreateProductScreen(
                 onClick = { viewModel.createProduct() },
                 modifier = Modifier.fillMaxWidth().height(56.dp),
                 shape = RoundedCornerShape(16.dp),
-                enabled = !state.isLoading && state.nombre.isNotBlank() && state.precio.isNotBlank()
+                enabled = !state.isLoading && state.nombre.isNotBlank() && state.precio.isNotBlank() && state.categoriaId.isNotBlank()
             ) {
                 if (state.isLoading) {
                     CircularProgressIndicator(modifier = Modifier.size(24.dp), color = MaterialTheme.colorScheme.onPrimary, strokeWidth = 3.dp)

@@ -18,12 +18,6 @@ data class ProductoUpdateRequest(
     val categoria_id: Int?
 )
 
-data class ProductoImageCreateRequest(
-    val producto_id: String,
-    val imagen_id: Int,
-    val es_principal: Boolean? = null
-)
-
 data class ProductoResponse(
     val producto_id: String?,
     val nombre: String,
@@ -34,4 +28,10 @@ data class ProductoResponse(
     val categoria_id: Int,
     val fecha_creacion: String,
     val imagenes: List<ImagenResponse>
+)
+
+data class CategoriaResponse(
+    val categoria_id: Int,
+    val nombre: String,
+    val seccion_id: Int
 )

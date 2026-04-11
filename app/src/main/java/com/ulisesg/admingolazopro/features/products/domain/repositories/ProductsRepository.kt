@@ -1,5 +1,6 @@
 package com.ulisesg.admingolazopro.features.products.domain.repositories
 
+import com.ulisesg.admingolazopro.features.products.domain.entities.Category
 import com.ulisesg.admingolazopro.features.products.domain.entities.Product
 
 interface ProductsRepository {
@@ -11,4 +12,5 @@ interface ProductsRepository {
     suspend fun changeDestacado(id: String, destacado: Boolean): Result<Product>
     suspend fun changeStatus(id: String, status: Boolean): Result<Product>
     suspend fun getProductsByCategoria(categoriaId: Int): List<Product>
+    suspend fun getCategorias(): List<Category>
 }

@@ -2,9 +2,11 @@ package com.ulisesg.admingolazopro.features.products.presentation.viewmodels
 
 import android.content.Context
 import android.net.Uri
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ulisesg.admingolazopro.core.hardware.domain.VibratorRepository
+import com.ulisesg.admingolazopro.features.products.domain.entities.Category
 import com.ulisesg.admingolazopro.features.products.domain.entities.Image
 import com.ulisesg.admingolazopro.features.products.domain.entities.Product
 import com.ulisesg.admingolazopro.features.products.domain.entities.ProductImage
@@ -24,6 +26,7 @@ data class CreateProductUiState(
     val precio: String = "",
     val descripcion: String = "",
     val categoriaId: String = "",
+    val categorias: List<Category> = emptyList(),
     val imagenes: List<String> = emptyList(),
     val estaActivo: Boolean = true,
     val estaDestacado: Boolean = false,
@@ -42,6 +45,21 @@ class CreateProductViewModel @Inject constructor(
 
     private val _uiState = MutableStateFlow(CreateProductUiState())
     val uiState: StateFlow<CreateProductUiState> = _uiState.asStateFlow()
+
+    init {
+        loadCategorias()
+    }
+
+    private fun loadCategorias() {
+        viewModelScope.launch {
+            try {
+                val categorias = productRepository.getCategorias()
+                _uiState.update { it.copy(categorias = categorias) }
+            } catch (e: Exception) {
+                Log.e("CreateProductViewModel", "Error cargando categorías", e)
+            }
+        }
+    }
 
     fun updateNombre(value: String) = _uiState.update { it.copy(nombre = value) }
     fun updatePrecio(value: String) = _uiState.update { it.copy(precio = value) }
