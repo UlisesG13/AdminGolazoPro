@@ -14,25 +14,25 @@ import retrofit2.http.Query
 
 interface ProductsApi {
 
-    @GET("productos")
+    @GET("productos/")
     suspend fun getProducts(): List<ProductoResponse>
 
-    @GET("productos/{id}")
+    @GET("productos/{id}/")
     suspend fun getProductById(
         @Path("id") id: String
     ): ProductoResponse
 
-    @GET("productos/by-categoria/{categoriaId}")
+    @GET("productos/by-categoria/{categoriaId}/")
     suspend fun getProductsByCategoria(
         @Path("categoriaId") categoriaId: Int
     ): List<ProductoResponse>
 
-    @POST("productos")
+    @POST("productos/")
     suspend fun createProduct(
         @Body request: ProductoCreateRequest
     ): ProductoResponse
 
-    @PUT("productos/{id}")
+    @PUT("productos/{id}/")
     suspend fun updateProduct(
         @Path("id") id: String,
         @Body request: ProductoUpdateRequest
@@ -55,6 +55,6 @@ interface ProductsApi {
         @Path("id") id: String
     )
 
-    @GET("categorias")
+    @GET("categorias/")
     suspend fun getCategorias(): List<CategoriaResponse>
 }

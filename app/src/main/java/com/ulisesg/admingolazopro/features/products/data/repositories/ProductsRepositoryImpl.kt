@@ -109,6 +109,7 @@ class ProductsRepositoryImpl @Inject constructor(
 
     override suspend fun getCategorias(): List<Category> {
         return try {
+            // api.getCategorias().map { Category(it.categoria_id, it.nombre, it.categoria_id) }
             val response = api.getCategorias()
             Log.d(TAG, "getCategorias: $response")
             response.map {
