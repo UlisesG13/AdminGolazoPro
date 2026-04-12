@@ -101,6 +101,7 @@ class ProductsRepositoryImpl @Inject constructor(
     override suspend fun getProductsByCategoria(categoriaId: Int): List<Product> {
         return try {
             val response = api.getProductsByCategoria(categoriaId)
+            Log.d(TAG, "getProductsByCategoria: $response")
             response.map { ProductMapper.toDomain(it) }
         } catch (e: Exception) {
             local.getProducts().filter { it.categoriaId == categoriaId }.map { it.toDomain() }

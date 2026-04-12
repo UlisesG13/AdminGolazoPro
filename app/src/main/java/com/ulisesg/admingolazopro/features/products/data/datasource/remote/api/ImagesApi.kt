@@ -22,23 +22,23 @@ interface ImagesApi {
         @Part("orden") orden: RequestBody
     ): ImagenResponse
 
-    @POST("imagenes/producto")
+    @POST("imagenes/productos")
     suspend fun asociarImagen(
         @Body request: ProductoImagenCreateRequest
     ): ProductoImagenResponse
 
-    @GET("imagenes/producto/{productoId}")
+    @GET("imagenes/productos/{productoId}")
     suspend fun getImagenesProducto(
         @Path("productoId") productoId: String
     ): List<ImagenResponse>
 
-    @DELETE("imagenes/producto/{productoId}/{imagenId}")
+    @DELETE("imagenes/productos/{productoId}/{imagenId}")
     suspend fun desasociarImagen(
         @Path("productoId") productoId: String,
         @Path("imagenId") imagenId: Int
     )
 
-    @DELETE("imagenes/producto/{productoId}")
+    @DELETE("imagenes/productos/{productoId}")
     suspend fun eliminarImagenesProducto(
         @Path("productoId") productoId: String
     )

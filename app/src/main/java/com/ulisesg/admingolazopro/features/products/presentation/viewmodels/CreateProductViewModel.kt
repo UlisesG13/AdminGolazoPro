@@ -25,12 +25,13 @@ data class CreateProductUiState(
     val nombre: String = "",
     val precio: String = "",
     val descripcion: String = "",
-    val categoriaId: String = "",
+    val categoriaId: Int? = null,
     val categorias: List<Category> = emptyList(),
     val imagenes: List<String> = emptyList(),
     val estaActivo: Boolean = true,
     val estaDestacado: Boolean = false,
     val isLoading: Boolean = false,
+    val isLoadingCategorias: Boolean = false,
     val error: String? = null,
     val success: Boolean = false
 )
@@ -52,11 +53,18 @@ class CreateProductViewModel @Inject constructor(
 
     private fun loadCategorias() {
         viewModelScope.launch {
+            _uiState.update { it.copy(isLoadingCategorias = true) }
             try {
                 val categorias = productRepository.getCategorias()
-                _uiState.update { it.copy(categorias = categorias) }
+                _uiState.update { it.copy(categorias = categorias, isLoadingCategorias = false) }
             } catch (e: Exception) {
                 Log.e("CreateProductViewModel", "Error cargando categorías", e)
+                _uiState.update {
+                    it.copy(
+                        isLoadingCategorias = false,
+                        error = "Error cargando categorías"
+                    )
+                }
             }
         }
     }
@@ -64,7 +72,10 @@ class CreateProductViewModel @Inject constructor(
     fun updateNombre(value: String) = _uiState.update { it.copy(nombre = value) }
     fun updatePrecio(value: String) = _uiState.update { it.copy(precio = value) }
     fun updateDescripcion(value: String) = _uiState.update { it.copy(descripcion = value) }
-    fun updateCategoria(value: String) = _uiState.update { it.copy(categoriaId = value) }
+    fun updateCategoria(id: Int) {
+        _uiState.update { it.copy(categoriaId = id) }
+    }
+
     fun toggleActivo() = _uiState.update { it.copy(estaActivo = !it.estaActivo) }
     fun toggleDestacado() = _uiState.update { it.copy(estaDestacado = !it.estaDestacado) }
 
@@ -82,20 +93,18 @@ class CreateProductViewModel @Inject constructor(
     fun createProduct() {
         val state = _uiState.value
 
-        if (state.nombre.isBlank() || state.precio.isBlank() || state.categoriaId.isBlank()) {
+        if (state.nombre.isBlank() || state.precio.isBlank() || state.categoriaId == null) {
             _uiState.update { it.copy(error = "Nombre, precio y categoría son obligatorios") }
             return
         }
         val precioInt = state.precio.toIntOrNull()
-        val categoriaIdInt = state.categoriaId.toIntOrNull()
-        if (precioInt == null || categoriaIdInt == null) {
-            _uiState.update { it.copy(error = "Precio o Categoría ID inválidos") }
+        if (precioInt == null) {
+            _uiState.update { it.copy(error = "Precio inválido") }
             return
         }
 
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true, error = null) }
-
             // ── Paso 1: Subir imágenes ────────────────────────────────────────────
             val uploadedImages = mutableListOf<Image>()
             try {
@@ -133,7 +142,7 @@ class CreateProductViewModel @Inject constructor(
                 descripcion = state.descripcion,
                 estaActivo = state.estaActivo,
                 esDestacado = state.estaDestacado,
-                categoriaId = categoriaIdInt,
+                categoriaId = state.categoriaId,
                 imagenes = emptyList(),
                 fechaCreacion = ""
             )

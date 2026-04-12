@@ -75,7 +75,13 @@ fun CreateProductScreen(
         containerColor = MaterialTheme.colorScheme.background,
         topBar = {
             CenterAlignedTopAppBar(
-                title = { Text("Nuevo Producto", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold) },
+                title = {
+                    Text(
+                        "Nuevo Producto",
+                        style = MaterialTheme.typography.titleLarge,
+                        fontWeight = FontWeight.Bold
+                    )
+                },
                 navigationIcon = {
                     IconButton(onClick = onProductCreated) {
                         Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Atrás")
@@ -103,7 +109,13 @@ fun CreateProductScreen(
                     label = { Text("Nombre del producto") },
                     modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(16.dp),
-                    leadingIcon = { Icon(Icons.Default.ShoppingBag, contentDescription = null, tint = MaterialTheme.colorScheme.primary) }
+                    leadingIcon = {
+                        Icon(
+                            Icons.Default.ShoppingBag,
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.primary
+                        )
+                    }
                 )
 
                 OutlinedTextField(
@@ -117,7 +129,10 @@ fun CreateProductScreen(
             }
 
             CreateProductSection(title = "Precio y Clasificación", icon = Icons.Default.Category) {
-                Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(16.dp)
+                ) {
                     OutlinedTextField(
                         value = state.precio,
                         onValueChange = viewModel::updatePrecio,
@@ -129,36 +144,51 @@ fun CreateProductScreen(
                     )
 
                     var expanded by remember { mutableStateOf(false) }
-                    val selectedCategory = state.categorias.find { it.categoria_id.toString() == state.categoriaId }
+                    val selectedCategory = state.categorias.find { it.id == state.categoriaId }
 
                     ExposedDropdownMenuBox(
                         expanded = expanded,
-                        onExpandedChange = { expanded = !expanded },
+                        onExpandedChange = { if (!state.isLoadingCategorias) expanded = !expanded },
                         modifier = Modifier.weight(1f)
                     ) {
                         OutlinedTextField(
-                            value = selectedCategory?.nombre ?: "Seleccionar",
+                            value = when {
+                                state.isLoadingCategorias -> "Cargando..."
+                                selectedCategory != null -> selectedCategory.nombre
+                                else -> "Seleccionar"
+                            },
                             onValueChange = {},
                             readOnly = true,
                             label = { Text("Categoría") },
-                            trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
+                            trailingIcon = {
+                                if (state.isLoadingCategorias) {
+                                    CircularProgressIndicator(
+                                        modifier = Modifier.size(20.dp),
+                                        strokeWidth = 2.dp
+                                    )
+                                } else {
+                                    ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
+                                }
+                            },
                             modifier = Modifier.menuAnchor(),
                             shape = RoundedCornerShape(16.dp),
                             colors = ExposedDropdownMenuDefaults.outlinedTextFieldColors()
                         )
 
-                        ExposedDropdownMenu(
-                            expanded = expanded,
-                            onDismissRequest = { expanded = false }
-                        ) {
-                            state.categorias.forEach { categoria ->
-                                DropdownMenuItem(
-                                    text = { Text(categoria.nombre) },
-                                    onClick = {
-                                        viewModel.updateCategoria(categoria.categoria_id.toString())
-                                        expanded = false
-                                    }
-                                )
+                        if (!state.isLoadingCategorias) {
+                            ExposedDropdownMenu(
+                                expanded = expanded,
+                                onDismissRequest = { expanded = false }
+                            ) {
+                                state.categorias.forEach { categoria ->
+                                    DropdownMenuItem(
+                                        text = { Text(categoria.nombre) },
+                                        onClick = {
+                                            viewModel.updateCategoria(categoria.id)
+                                            expanded = false
+                                        }
+                                    )
+                                }
                             }
                         }
                     }
@@ -170,10 +200,19 @@ fun CreateProductScreen(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Column {
-                        Text("Estado del producto", style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.Bold)
-                        Text(if (state.estaActivo) "Visible en tienda" else "Oculto", style = MaterialTheme.typography.bodySmall)
+                        Text(
+                            "Estado del producto",
+                            style = MaterialTheme.typography.labelLarge,
+                            fontWeight = FontWeight.Bold
+                        )
+                        Text(
+                            if (state.estaActivo) "Visible en tienda" else "Oculto",
+                            style = MaterialTheme.typography.bodySmall
+                        )
                     }
-                    Switch(checked = state.estaActivo, onCheckedChange = { viewModel.toggleActivo() })
+                    Switch(
+                        checked = state.estaActivo,
+                        onCheckedChange = { viewModel.toggleActivo() })
                 }
             }
 
@@ -189,21 +228,42 @@ fun CreateProductScreen(
                                     model = uri,
                                     contentDescription = null,
                                     contentScale = ContentScale.Crop,
-                                    modifier = Modifier.fillMaxSize().clip(RoundedCornerShape(16.dp))
+                                    modifier = Modifier
+                                        .fillMaxSize()
+                                        .clip(RoundedCornerShape(16.dp))
                                 )
                                 IconButton(
                                     onClick = { viewModel.removeImage(uri) },
-                                    modifier = Modifier.align(Alignment.TopEnd).padding(4.dp).size(24.dp).background(Color.Black.copy(alpha = 0.6f), CircleShape)
+                                    modifier = Modifier
+                                        .align(Alignment.TopEnd)
+                                        .padding(4.dp)
+                                        .size(24.dp)
+                                        .background(Color.Black.copy(alpha = 0.6f), CircleShape)
                                 ) {
-                                    Icon(Icons.Default.Close, contentDescription = null, tint = Color.White, modifier = Modifier.size(14.dp))
+                                    Icon(
+                                        Icons.Default.Close,
+                                        contentDescription = null,
+                                        tint = Color.White,
+                                        modifier = Modifier.size(14.dp)
+                                    )
                                 }
                                 if (index == 0) {
                                     Surface(
-                                        modifier = Modifier.align(Alignment.BottomCenter).padding(4.dp),
+                                        modifier = Modifier
+                                            .align(Alignment.BottomCenter)
+                                            .padding(4.dp),
                                         shape = RoundedCornerShape(8.dp),
                                         color = MaterialTheme.colorScheme.primary
                                     ) {
-                                        Text("Portada", style = MaterialTheme.typography.labelSmall, modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp), color = Color.White)
+                                        Text(
+                                            "Portada",
+                                            style = MaterialTheme.typography.labelSmall,
+                                            modifier = Modifier.padding(
+                                                horizontal = 6.dp,
+                                                vertical = 2.dp
+                                            ),
+                                            color = Color.White
+                                        )
                                     }
                                 }
                             }
@@ -211,17 +271,31 @@ fun CreateProductScreen(
                     }
                 }
 
-                Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                    FilledTonalButton(onClick = { galleryLauncher.launch("image/*") }, modifier = Modifier.weight(1f), shape = RoundedCornerShape(12.dp)) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    FilledTonalButton(
+                        onClick = { galleryLauncher.launch("image/*") },
+                        modifier = Modifier.weight(1f),
+                        shape = RoundedCornerShape(12.dp)
+                    ) {
                         Icon(Icons.Default.Photo, contentDescription = null)
                         Spacer(Modifier.width(8.dp))
                         Text("Galería")
                     }
                     FilledTonalButton(
                         onClick = {
-                            if (ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
-                                val uri = createImageUri(context); cameraUri = uri; cameraLauncher.launch(uri)
-                            } else { permissionLauncher.launch(Manifest.permission.CAMERA) }
+                            if (ContextCompat.checkSelfPermission(
+                                    context,
+                                    Manifest.permission.CAMERA
+                                ) == PackageManager.PERMISSION_GRANTED
+                            ) {
+                                val uri = createImageUri(context); cameraUri =
+                                    uri; cameraLauncher.launch(uri)
+                            } else {
+                                permissionLauncher.launch(Manifest.permission.CAMERA)
+                            }
                         },
                         modifier = Modifier.weight(1f),
                         shape = RoundedCornerShape(12.dp)
@@ -239,8 +313,15 @@ fun CreateProductScreen(
                     shape = RoundedCornerShape(12.dp),
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    Row(modifier = Modifier.padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
-                        Icon(Icons.Default.Error, contentDescription = null, tint = MaterialTheme.colorScheme.error)
+                    Row(
+                        modifier = Modifier.padding(16.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Icon(
+                            Icons.Default.Error,
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.error
+                        )
                         Spacer(Modifier.width(12.dp))
                         Text(
                             text = if (it.contains("categoria_id")) "Error: La categoría seleccionada no es válida." else it,
@@ -253,14 +334,24 @@ fun CreateProductScreen(
 
             Button(
                 onClick = { viewModel.createProduct() },
-                modifier = Modifier.fillMaxWidth().height(56.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(56.dp),
                 shape = RoundedCornerShape(16.dp),
-                enabled = !state.isLoading && state.nombre.isNotBlank() && state.precio.isNotBlank() && state.categoriaId.isNotBlank()
+                enabled = !state.isLoading && state.nombre.isNotBlank() && state.precio.isNotBlank() && state.categoriaId != null
             ) {
                 if (state.isLoading) {
-                    CircularProgressIndicator(modifier = Modifier.size(24.dp), color = MaterialTheme.colorScheme.onPrimary, strokeWidth = 3.dp)
+                    CircularProgressIndicator(
+                        modifier = Modifier.size(24.dp),
+                        color = MaterialTheme.colorScheme.onPrimary,
+                        strokeWidth = 3.dp
+                    )
                 } else {
-                    Text("Publicar Producto", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+                    Text(
+                        "Publicar Producto",
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.Bold
+                    )
                 }
             }
             Spacer(modifier = Modifier.height(24.dp))
@@ -269,14 +360,32 @@ fun CreateProductScreen(
 }
 
 @Composable
-private fun CreateProductSection(title: String, icon: androidx.compose.ui.graphics.vector.ImageVector, content: @Composable ColumnScope.() -> Unit) {
+private fun CreateProductSection(
+    title: String,
+    icon: androidx.compose.ui.graphics.vector.ImageVector,
+    content: @Composable ColumnScope.() -> Unit
+) {
     Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
         Row(verticalAlignment = Alignment.CenterVertically) {
-            Icon(icon, contentDescription = null, tint = MaterialTheme.colorScheme.primary, modifier = Modifier.size(20.dp))
+            Icon(
+                icon,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.primary,
+                modifier = Modifier.size(20.dp)
+            )
             Spacer(Modifier.width(8.dp))
-            Text(text = title, style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary)
+            Text(
+                text = title,
+                style = MaterialTheme.typography.titleSmall,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.primary
+            )
         }
         content()
-        HorizontalDivider(modifier = Modifier.padding(top = 8.dp), thickness = 0.5.dp, color = MaterialTheme.colorScheme.outlineVariant)
+        HorizontalDivider(
+            modifier = Modifier.padding(top = 8.dp),
+            thickness = 0.5.dp,
+            color = MaterialTheme.colorScheme.outlineVariant
+        )
     }
 }
