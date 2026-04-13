@@ -1,6 +1,6 @@
 # AdminGolazoPro
 
-Una aplicación Android moderna para gestionar datos de fútbol, desarrollada con **Kotlin** y **Jetpack Compose**.
+Una aplicación Android moderna para gestionar datos, desarrollada con **Kotlin** y **Jetpack Compose**.
 
 ##  Características Principales
 
