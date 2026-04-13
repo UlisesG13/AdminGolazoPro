@@ -2,16 +2,15 @@
 
 Una aplicación Android moderna para gestionar datos de fútbol, desarrollada con **Kotlin** y **Jetpack Compose**.
 
-## 📱 Características Principales
+##  Características Principales
 
 - **Arquitectura Moderna**: Construida con Compose, Hilt y Room Database
 - **Autenticación Segura**: Integración con biometría y Firebase
 - **Gestión de Datos Offline**: Room Database para persistencia local
 - **Notificaciones Push**: Firebase Cloud Messaging
 - **Multientorno**: Configuración separada para DEV y PROD
-- **APIs Externas**: Integración con Rick and Morty API y JSON Placeholder
 
-## 🛠️ Stack Tecnológico
+##  Stack Tecnológico
 
 ### Lenguaje y Framework
 - **Kotlin** - Lenguaje principal
@@ -44,14 +43,14 @@ Una aplicación Android moderna para gestionar datos de fútbol, desarrollada co
 ### Tasks & Work
 - **WorkManager** - Tareas en background
 
-## 📋 Requisitos Previos
+##  Requisitos Previos
 
 - Android Studio Koala o superior
 - JDK 21
 - Android SDK compileSdk 36
 - minSdk 26
 
-## 🚀 Instalación y Configuración
+##  Instalación y Configuración
 
 ### 1. Clonar el Repositorio
 ```bash
