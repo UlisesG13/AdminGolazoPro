@@ -11,3 +11,4 @@ class GetAllOrdersUseCase @Inject constructor(
         return repository.getAllOrders()
     }
 }
+

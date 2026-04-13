@@ -11,3 +11,4 @@ class GetCategorias @Inject constructor(
         return repository.getCategorias()
     }
 }
+

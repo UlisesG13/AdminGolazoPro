@@ -245,3 +245,4 @@ fun ProductDetailContent(product: Product, categoryName: String?) {
         )
     }
 }
+

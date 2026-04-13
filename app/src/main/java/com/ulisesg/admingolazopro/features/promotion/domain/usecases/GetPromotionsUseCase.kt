@@ -11,3 +11,4 @@ class GetPromotionsUseCase @Inject constructor(
         return repository.getPromotions()
     }
 }
+

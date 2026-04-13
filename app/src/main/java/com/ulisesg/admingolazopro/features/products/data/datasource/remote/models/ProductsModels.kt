@@ -31,3 +31,4 @@ data class ProductoResponse(
     val tallas: List<TallaResponse>,
     val colores: List<ColorResponse>
 )
+

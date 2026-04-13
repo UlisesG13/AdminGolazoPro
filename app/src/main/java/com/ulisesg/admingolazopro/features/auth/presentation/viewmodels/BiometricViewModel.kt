@@ -58,3 +58,4 @@ class BiometricViewModel @Inject constructor(
         biometricPrompt.authenticate(promptInfo)
     }
 }
+

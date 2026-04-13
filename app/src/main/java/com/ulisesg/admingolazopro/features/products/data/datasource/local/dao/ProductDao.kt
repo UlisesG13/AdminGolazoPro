@@ -28,3 +28,4 @@ interface ProductDao {
     suspend fun clear()
 
 }
+

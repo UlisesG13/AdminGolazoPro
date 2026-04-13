@@ -28,3 +28,4 @@ data class UpdateEmployeeRequest(
     @SerializedName("rol") val rol: String?,
     @SerializedName("esta_activo") val estaActivo: Boolean?
 )
+

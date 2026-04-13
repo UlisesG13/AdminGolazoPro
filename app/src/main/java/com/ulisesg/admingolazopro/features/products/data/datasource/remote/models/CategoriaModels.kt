@@ -10,3 +10,4 @@ data class CategoriaRequest(
     val nombre: String,
     val seccion_id: Int
 )
+

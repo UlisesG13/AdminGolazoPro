@@ -9,3 +9,4 @@ class GetProducts @Inject constructor(
 ) {
     suspend operator fun invoke(): List<Product> = repository.getProducts()
 }
+

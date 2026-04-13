@@ -3,7 +3,7 @@ package com.ulisesg.admingolazopro.features.products.presentation.viewmodels
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.ulisesg.admingolazopro.core.hardware.domain.VibratorRepository
+import com.ulisesg.admingolazopro.core.device.domain.VibratorRepository
 import com.ulisesg.admingolazopro.features.products.domain.repositories.ProductsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -63,3 +63,5 @@ class ProductsViewModel @Inject constructor(
         }
     }
 }
+
+

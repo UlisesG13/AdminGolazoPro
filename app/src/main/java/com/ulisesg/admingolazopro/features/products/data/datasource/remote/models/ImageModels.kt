@@ -18,3 +18,4 @@ data class ProductoImagenResponse(
     val imagen_id: Int,
     val es_principal: Boolean
 )
+

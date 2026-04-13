@@ -11,3 +11,4 @@ class ActivatePromotionUseCase @Inject constructor(
         return repository.activatePromotion(id)
     }
 }
+

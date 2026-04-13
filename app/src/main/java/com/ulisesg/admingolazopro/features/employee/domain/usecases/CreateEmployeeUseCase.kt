@@ -21,3 +21,4 @@ class CreateEmployeeUseCase @Inject constructor(
         return email.matches(Regex("^[A-Za-z0-9+_.-]+@(.+)$"))
     }
 }
+

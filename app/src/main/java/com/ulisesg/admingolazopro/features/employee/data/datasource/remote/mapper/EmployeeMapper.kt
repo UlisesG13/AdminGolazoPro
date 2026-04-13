@@ -18,3 +18,4 @@ fun EmployeeResponse.toDomain(): Employee {
 fun List<EmployeeResponse>.toDomain(): List<Employee> {
     return this.map { it.toDomain() }
 }
+

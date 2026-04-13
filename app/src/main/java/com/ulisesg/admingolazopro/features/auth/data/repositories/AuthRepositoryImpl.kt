@@ -30,3 +30,4 @@ class AuthRepositoryImpl @Inject constructor(
         return remote.register(request).toDomain()
     }
 }
+

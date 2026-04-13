@@ -1,0 +1,21 @@
+package com.ulisesg.admingolazopro.core.di.features
+
+
+import com.ulisesg.admingolazopro.features.auth.data.datasource.remote.api.AuthApi
+import dagger.Module
+import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
+import retrofit2.Retrofit
+import javax.inject.Singleton
+
+@Module
+@InstallIn(SingletonComponent::class)
+object AuthNetworkModule {
+    @Provides
+    @Singleton
+    fun provideAuthApi(retrofit: Retrofit): AuthApi {
+        return retrofit.create(AuthApi::class.java)
+    }
+}
+

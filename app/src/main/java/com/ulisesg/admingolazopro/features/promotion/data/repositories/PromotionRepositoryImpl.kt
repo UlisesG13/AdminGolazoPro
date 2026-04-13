@@ -40,3 +40,4 @@ class PromotionRepositoryImpl @Inject constructor(
         api.deactivatePromotion(id).toDomain()
     }
 }
+

@@ -21,3 +21,4 @@ data class AuthResponse(
     @SerializedName("rol") val rol: String,
     @SerializedName("token") val token: String?
 )
+

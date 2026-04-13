@@ -31,3 +31,4 @@ interface EmployeeApi {
     @GET("users/profile")
     suspend fun getEmployeeProfile(): EmployeeResponse
 }
+

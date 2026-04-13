@@ -66,3 +66,4 @@ val SuccessGreen = Color(0xFF2E7D32)
 val WarningOrange = Color(0xFFEF6C00)
 val InfoBlue = Color(0xFF0277BD)
 val PendingGrey = Color(0xFF616161)
+

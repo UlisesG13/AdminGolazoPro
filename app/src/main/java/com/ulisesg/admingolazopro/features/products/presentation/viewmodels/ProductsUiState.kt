@@ -8,3 +8,4 @@ data class ProductsUiState(
     val error: String? = null,
     val isSuccess: Boolean = false
 )
+

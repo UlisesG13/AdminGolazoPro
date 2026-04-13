@@ -104,3 +104,4 @@ class PromotionViewModel @Inject constructor(
         _state.update { it.copy(isSuccess = false) }
     }
 }
+

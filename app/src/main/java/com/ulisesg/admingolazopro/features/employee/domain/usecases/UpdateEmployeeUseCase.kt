@@ -11,3 +11,4 @@ class UpdateEmployeeUseCase @Inject constructor(
         return repository.updateEmployee(id, employee)
     }
 }
+

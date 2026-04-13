@@ -11,3 +11,4 @@ class UpdateOrderStatusUseCase @Inject constructor(
         return repository.updateOrderStatus(pedidoId, estado)
     }
 }
+

@@ -44,3 +44,4 @@ fun Promotion.toUpdateDto(): PromocionUpdateDTO {
 }
 
 fun List<PromocionDTO>.toDomain(): List<Promotion> = map { it.toDomain() }
+

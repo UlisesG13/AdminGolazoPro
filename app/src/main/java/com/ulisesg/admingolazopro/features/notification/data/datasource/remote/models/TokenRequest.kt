@@ -3,3 +3,4 @@ package com.ulisesg.admingolazopro.features.notification.data.datasource.remote.
 data class TokenRequest(
     val token: String
 )
+

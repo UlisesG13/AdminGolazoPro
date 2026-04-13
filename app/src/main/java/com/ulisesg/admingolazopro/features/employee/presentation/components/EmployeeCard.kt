@@ -158,3 +158,4 @@ private fun InfoRow(icon: androidx.compose.ui.graphics.vector.ImageVector, text:
         )
     }
 }
+

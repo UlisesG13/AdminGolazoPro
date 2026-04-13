@@ -11,3 +11,4 @@ interface EmployeeRepository {
     suspend fun deleteEmployee(id: String): Result<Unit>
     suspend fun getEmployeeProfile(): Result<Employee>
 }
+

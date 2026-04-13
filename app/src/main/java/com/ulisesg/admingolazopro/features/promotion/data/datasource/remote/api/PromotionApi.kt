@@ -41,3 +41,4 @@ interface PromotionApi {
         @Path("promocion_id") promocionId: Int
     ): PromocionDTO
 }
+

@@ -9,3 +9,4 @@ data class User(
     val rol: Rol = Rol.PENDIENTE,
     val token: String? = null
 )
+

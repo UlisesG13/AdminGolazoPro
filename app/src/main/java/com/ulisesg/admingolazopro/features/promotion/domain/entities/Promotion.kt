@@ -11,3 +11,4 @@ data class Promotion(
     val fechaExpiracion: String,
     val estaActiva: Boolean = false
 )
+

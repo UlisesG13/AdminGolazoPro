@@ -10,3 +10,4 @@ class DeleteEmployeeUseCase @Inject constructor(
         return repository.deleteEmployee(id)
     }
 }
+

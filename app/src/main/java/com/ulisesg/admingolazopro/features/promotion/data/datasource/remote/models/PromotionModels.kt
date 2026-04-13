@@ -33,3 +33,4 @@ data class PromocionDTO(
     @SerializedName("fecha_expiracion") val fecha_expiracion: String,
     @SerializedName("esta_activa") val esta_activa: Boolean
 )
+

@@ -8,3 +8,4 @@ data class OrderUiState(
     val error: String? = null,
     val isSuccess: Boolean = false
 )
+

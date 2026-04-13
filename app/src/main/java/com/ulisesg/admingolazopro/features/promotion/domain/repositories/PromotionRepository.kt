@@ -11,3 +11,4 @@ interface PromotionRepository {
     suspend fun activatePromotion(id: Int): Result<Promotion>
     suspend fun deactivatePromotion(id: Int): Result<Promotion>
 }
+

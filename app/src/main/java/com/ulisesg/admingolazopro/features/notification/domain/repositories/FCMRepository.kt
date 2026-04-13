@@ -4,3 +4,4 @@ interface FCMRepository {
     suspend fun registerToken(token: String)
     fun getToken(onResult: (String?) -> Unit)
 }
+

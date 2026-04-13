@@ -6,3 +6,4 @@ interface OrderRepository {
     suspend fun updateOrderStatus(pedidoId: Int, estado: String): Result<Order>
     suspend fun getAllOrders(): Result<List<Order>>
 }
+

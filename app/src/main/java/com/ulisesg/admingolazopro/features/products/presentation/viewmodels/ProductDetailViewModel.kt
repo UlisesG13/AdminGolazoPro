@@ -2,7 +2,7 @@ package com.ulisesg.admingolazopro.features.products.presentation.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.ulisesg.admingolazopro.core.hardware.domain.VibratorRepository
+import com.ulisesg.admingolazopro.core.device.domain.VibratorRepository
 import com.ulisesg.admingolazopro.features.products.domain.entities.Product
 import com.ulisesg.admingolazopro.features.products.domain.repositories.ProductsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -57,3 +57,5 @@ class ProductDetailViewModel @Inject constructor(
         }
     }
 }
+
+

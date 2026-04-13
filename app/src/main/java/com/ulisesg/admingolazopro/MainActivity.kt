@@ -6,9 +6,9 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
-import com.ulisesg.admingolazopro.core.backup.data.DatabaseBackupWorker
+import com.ulisesg.admingolazopro.core.database.backup.DatabaseBackupWorker
 import com.ulisesg.admingolazopro.core.ui.theme.AppTheme
-import com.ulisesg.admingolazopro.core.navigate.NavigationWrapper
+import com.ulisesg.admingolazopro.core.navigation.NavigationWrapper
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -28,3 +28,4 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
+

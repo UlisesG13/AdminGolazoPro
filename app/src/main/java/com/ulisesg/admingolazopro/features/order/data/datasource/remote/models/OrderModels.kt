@@ -15,3 +15,4 @@ data class OrderDto(
     @SerializedName("notas") val notas: String?,
     @SerializedName("direccion") val direccion: Map<String, Any>?
 )
+

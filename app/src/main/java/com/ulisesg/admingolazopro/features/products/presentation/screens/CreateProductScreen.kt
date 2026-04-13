@@ -32,7 +32,9 @@ import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import coil.compose.AsyncImage
-import com.ulisesg.admingolazopro.core.hardware.createImageUri
+import com.ulisesg.admingolazopro.core.device.data.AndroidImagePickerRepository
+import com.ulisesg.admingolazopro.core.device.presentation.ImagePickerLauncher
+import com.ulisesg.admingolazopro.core.utils.createImageUri
 import com.ulisesg.admingolazopro.features.products.presentation.viewmodels.CreateProductViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -51,21 +53,16 @@ fun CreateProductScreen(
         }
     }
 
-    var cameraUri by remember { mutableStateOf<Uri?>(null) }
-
-    val galleryLauncher = rememberLauncherForActivityResult(
-        ActivityResultContracts.GetContent()
-    ) { uri -> uri?.let { viewModel.addImage(it) } }
-
-    val cameraLauncher = rememberLauncherForActivityResult(
-        ActivityResultContracts.TakePicture()
-    ) { success -> if (success) cameraUri?.let { viewModel.addImage(it) } }
+    ImagePickerLauncher(
+        picker = viewModel.imagePicker as AndroidImagePickerRepository,
+        onImageSelected = { viewModel.addImage(it) }
+    )
 
     val permissionLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.RequestPermission()
     ) { isGranted ->
         if (isGranted) {
-            val uri = createImageUri(context); cameraUri = uri; cameraLauncher.launch(uri)
+            val uri = createImageUri(context); viewModel.imagePicker.openCamera(uri)
         } else {
             Toast.makeText(context, "Permiso de cámara denegado", Toast.LENGTH_SHORT).show()
         }
@@ -276,7 +273,7 @@ fun CreateProductScreen(
                     horizontalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
                     FilledTonalButton(
-                        onClick = { galleryLauncher.launch("image/*") },
+                        onClick = { viewModel.imagePicker.openGallery() },
                         modifier = Modifier.weight(1f),
                         shape = RoundedCornerShape(12.dp)
                     ) {
@@ -291,8 +288,8 @@ fun CreateProductScreen(
                                     Manifest.permission.CAMERA
                                 ) == PackageManager.PERMISSION_GRANTED
                             ) {
-                                val uri = createImageUri(context); cameraUri =
-                                    uri; cameraLauncher.launch(uri)
+                                val uri = createImageUri(context)
+                                viewModel.imagePicker.openCamera(uri)
                             } else {
                                 permissionLauncher.launch(Manifest.permission.CAMERA)
                             }
@@ -389,3 +386,5 @@ private fun CreateProductSection(
         )
     }
 }
+
+

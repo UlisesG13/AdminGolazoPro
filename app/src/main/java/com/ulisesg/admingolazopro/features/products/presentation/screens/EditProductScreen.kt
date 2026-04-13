@@ -32,7 +32,7 @@ import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import coil.compose.AsyncImage
-import com.ulisesg.admingolazopro.core.hardware.createImageUri
+import com.ulisesg.admingolazopro.core.utils.createImageUri
 import com.ulisesg.admingolazopro.features.products.presentation.viewmodels.EditProductViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -279,3 +279,5 @@ private fun ProductSection(title: String, icon: androidx.compose.ui.graphics.vec
         HorizontalDivider(modifier = Modifier.padding(top = 8.dp), thickness = 0.5.dp, color = MaterialTheme.colorScheme.outlineVariant)
     }
 }
+
+

@@ -10,3 +10,4 @@ class DeletePromotionUseCase @Inject constructor(
         return repository.deletePromotion(id)
     }
 }
+

@@ -11,3 +11,4 @@ class GetEmployeeByEmailUseCase @Inject constructor(
         return repository.getEmployeeByEmail(email)
     }
 }
+

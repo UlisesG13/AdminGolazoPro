@@ -1,9 +1,9 @@
 package com.ulisesg.admingolazopro.core.di
 
-import com.ulisesg.admingolazopro.core.hardware.data.AndroidImagePickerRepository
-import com.ulisesg.admingolazopro.core.hardware.data.AndroidVibratorManager
-import com.ulisesg.admingolazopro.core.hardware.domain.ImagePickerRepository
-import com.ulisesg.admingolazopro.core.hardware.domain.VibratorRepository
+import com.ulisesg.admingolazopro.core.device.data.AndroidImagePickerRepository
+import com.ulisesg.admingolazopro.core.device.data.AndroidVibratorManager
+import com.ulisesg.admingolazopro.core.device.domain.ImagePickerRepository
+import com.ulisesg.admingolazopro.core.device.domain.VibratorRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -26,3 +26,4 @@ abstract class HardwareModule {
         impl: AndroidVibratorManager
     ): VibratorRepository
 }
+

@@ -11,3 +11,4 @@ class UpdatePromotionUseCase @Inject constructor(
         return repository.updatePromotion(id, promotion)
     }
 }
+

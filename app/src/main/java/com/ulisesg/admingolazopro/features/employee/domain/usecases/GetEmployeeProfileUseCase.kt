@@ -11,3 +11,4 @@ class GetEmployeeProfileUseCase @Inject constructor(
         return repository.getEmployeeProfile()
     }
 }
+
