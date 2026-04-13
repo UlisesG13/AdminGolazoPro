@@ -1,0 +1,32 @@
+package com.ulisesg.admingolazopro.features.notification.data.di
+
+import com.ulisesg.admingolazopro.features.notification.data.datasource.remote.api.FCMTokenDataSource
+import com.ulisesg.admingolazopro.features.notification.data.repositories.FCMRepositoryImpl
+import com.ulisesg.admingolazopro.features.notification.domain.repositories.FCMRepository
+import dagger.Binds
+import dagger.Module
+import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
+import javax.inject.Singleton
+
+@Module
+@InstallIn(SingletonComponent::class)
+abstract class TokenRepositoryModule {
+
+    // Esto le dice a Hilt: "Cuando alguien pida FCMRepository, dale FCMRepositoryImpl"
+    @Binds
+    @Singleton
+    abstract fun bindTokenRepository(
+        tokenRepositoryImpl: FCMRepositoryImpl
+    ): FCMRepository
+
+    companion object {
+        // Como FCMTokenDataSource no es una interfaz, usamos @Provides aquí
+        @Provides
+        @Singleton
+        fun provideFCMTokenDataSource(): FCMTokenDataSource {
+            return FCMTokenDataSource()
+        }
+    }
+}

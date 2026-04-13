@@ -7,6 +7,7 @@ import com.ulisesg.admingolazopro.features.auth.domain.entities.User
 import com.ulisesg.admingolazopro.features.auth.domain.usecases.Login
 import com.ulisesg.admingolazopro.features.auth.domain.usecases.Register
 import com.ulisesg.admingolazopro.features.auth.presentation.components.AuthUiState
+import com.ulisesg.admingolazopro.features.notification.domain.usecases.RegisterFCMTokenUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -18,7 +19,8 @@ import javax.inject.Inject
 @HiltViewModel
 class AuthViewModel @Inject constructor(
     private val loginUseCase: Login,
-    private val registerUseCase: Register
+    private val registerUseCase: Register,
+    private val registerFCMTokenUseCase: RegisterFCMTokenUseCase
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(
@@ -52,6 +54,9 @@ class AuthViewModel @Inject constructor(
             _state.update { it.copy(isLoading = true, error = null) }
             try {
                 val result = loginUseCase(user)
+
+                registerFCMTokenUseCase()
+
                 _state.update {
                     it.copy(
                         isLoading = false,
@@ -71,6 +76,9 @@ class AuthViewModel @Inject constructor(
             _state.update { it.copy(isLoading = true, error = null) }
             try {
                 val result = registerUseCase(user)
+
+                registerFCMTokenUseCase()
+
                 _state.update {
                     it.copy(
                         isLoading = false,
