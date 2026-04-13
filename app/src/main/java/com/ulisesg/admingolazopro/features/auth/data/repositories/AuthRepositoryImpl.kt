@@ -1,5 +1,6 @@
 package com.ulisesg.admingolazopro.features.auth.data.repositories
 
+import com.ulisesg.admingolazopro.core.auth.TokenManager
 import com.ulisesg.admingolazopro.features.auth.data.datasource.remote.api.AuthApi
 import com.ulisesg.admingolazopro.features.auth.data.datasource.remote.mapper.toDomain
 import com.ulisesg.admingolazopro.features.auth.data.datasource.remote.models.LoginRequest
@@ -9,7 +10,8 @@ import com.ulisesg.admingolazopro.features.auth.domain.repositories.AuthReposito
 import javax.inject.Inject
 
 class AuthRepositoryImpl @Inject constructor(
-    private val remote: AuthApi
+    private val remote: AuthApi,
+    private val tokenManager: TokenManager
 ) : AuthRepository {
 
     override suspend fun login(credentials: User): User {
@@ -17,7 +19,9 @@ class AuthRepositoryImpl @Inject constructor(
             email = credentials.email,
             password = credentials.password
         )
-        return remote.login(request).toDomain()
+        val response = remote.login(request)
+        response.token?.let { tokenManager.saveToken(it) }
+        return response.toDomain()
     }
 
     override suspend fun register(user: User): User {
@@ -27,6 +31,8 @@ class AuthRepositoryImpl @Inject constructor(
             password = user.password,
             rol = user.rol.value // Se cambió .name por .value para enviar "administrador" en lugar de "ADMINISTRADOR"
         )
-        return remote.register(request).toDomain()
+        val response = remote.register(request)
+        response.token?.let { tokenManager.saveToken(it) }
+        return response.toDomain()
     }
 }
