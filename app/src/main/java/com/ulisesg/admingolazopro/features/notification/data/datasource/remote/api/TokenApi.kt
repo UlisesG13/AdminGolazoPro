@@ -5,6 +5,6 @@ import retrofit2.http.POST
 import com.ulisesg.admingolazopro.features.notification.data.datasource.remote.models.TokenRequest
 
 interface TokenApi {
-    @POST("user/device-token")
+    @POST("users/device-token")
     suspend fun registerToken(@Body request: TokenRequest)
 }
