@@ -1,4 +1,4 @@
-package com.ulisesg.admingolazopro.core.di.features
+package com.ulisesg.admingolazopro.features.order.data.datasource.remote.di
 
 import com.ulisesg.admingolazopro.features.order.data.repositories.OrderRepositoryImpl
 import com.ulisesg.admingolazopro.features.order.domain.repositories.OrderRepository
@@ -18,5 +18,3 @@ abstract class OrderRepositoryModule {
         orderRepositoryImpl: OrderRepositoryImpl
     ): OrderRepository
 }
-
-

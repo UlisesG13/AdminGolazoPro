@@ -1,4 +1,4 @@
-package com.ulisesg.admingolazopro.core.di.features
+package com.ulisesg.admingolazopro.features.employee.data.di
 
 import com.ulisesg.admingolazopro.features.employee.data.datasource.remote.api.EmployeeApi
 import dagger.Module
@@ -18,5 +18,3 @@ object EmployeeNetworkModule {
         return retrofit.create(EmployeeApi::class.java)
     }
 }
-
-

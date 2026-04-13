@@ -1,4 +1,4 @@
-package com.ulisesg.admingolazopro.core.di.features
+package com.ulisesg.admingolazopro.features.products.data.datasource.remote.di
 
 import com.ulisesg.admingolazopro.features.products.data.repositories.ImageRepositoryImpl
 import com.ulisesg.admingolazopro.features.products.data.repositories.ProductsRepositoryImpl
@@ -26,5 +26,3 @@ abstract class ProductsRepositoryModule {
         imageRepositoryImpl: ImageRepositoryImpl
     ): ImageRepository
 }
-
-

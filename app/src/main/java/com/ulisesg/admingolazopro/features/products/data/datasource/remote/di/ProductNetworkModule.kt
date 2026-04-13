@@ -1,4 +1,4 @@
-package com.ulisesg.admingolazopro.core.di.features
+package com.ulisesg.admingolazopro.features.products.data.datasource.remote.di
 
 import com.ulisesg.admingolazopro.features.products.data.datasource.remote.api.ImagesApi
 import com.ulisesg.admingolazopro.features.products.data.datasource.remote.api.ProductsApi
@@ -25,5 +25,3 @@ object ProductsNetworkModule {
         return retrofit.create(ImagesApi::class.java)
     }
 }
-
-

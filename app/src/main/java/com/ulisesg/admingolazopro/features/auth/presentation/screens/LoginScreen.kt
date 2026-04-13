@@ -129,16 +129,26 @@ fun LoginScreen(
 
             if (biometricViewModel.canAuthenticate()) {
                 Spacer(modifier = Modifier.height(16.dp))
+
                 OutlinedButton(
                     onClick = {
                         activity?.let {
                             biometricViewModel.authenticate(
                                 activity = it,
-                                onSuccess = onLoginSuccess,
+                                onSuccess = {
+                                    // Si la huella es correcta, intentamos el login automático
+                                    viewModel.loginWithBiometrics(
+                                        onNoCredentials = {
+                                            // Si no había datos guardados, mostramos un mensaje o simplemente
+                                            // pedimos al usuario que haga login manual una vez para guardarlos.
+                                            scope.launch {
+                                                snackbarHostState.showSnackbar("Ingresa tus datos una vez para activarlo")
+                                            }
+                                        }
+                                    )
+                                },
                                 onError = { error ->
-                                    scope.launch {
-                                        snackbarHostState.showSnackbar(error)
-                                    }
+                                    scope.launch { snackbarHostState.showSnackbar(error) }
                                 }
                             )
                         }

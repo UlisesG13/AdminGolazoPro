@@ -1,4 +1,4 @@
-package com.ulisesg.admingolazopro.core.di.features
+package com.ulisesg.admingolazopro.features.employee.data.di
 
 import com.ulisesg.admingolazopro.features.employee.data.repositories.EmployeeRepositoryImpl
 import com.ulisesg.admingolazopro.features.employee.domain.repositories.EmployeeRepository
@@ -18,5 +18,3 @@ abstract class EmployeeRepositoryModule {
         employeeRepositoryImpl: EmployeeRepositoryImpl
     ): EmployeeRepository
 }
-
-

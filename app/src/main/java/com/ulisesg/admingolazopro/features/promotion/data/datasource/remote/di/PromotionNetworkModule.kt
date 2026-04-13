@@ -1,4 +1,4 @@
-package com.ulisesg.admingolazopro.core.di.features
+package com.ulisesg.admingolazopro.features.promotion.data.datasource.remote.di
 
 import com.ulisesg.admingolazopro.features.promotion.data.datasource.remote.api.PromotionApi
 import dagger.Module
@@ -18,5 +18,3 @@ object PromotionNetworkModule {
         return retrofit.create(PromotionApi::class.java)
     }
 }
-
-

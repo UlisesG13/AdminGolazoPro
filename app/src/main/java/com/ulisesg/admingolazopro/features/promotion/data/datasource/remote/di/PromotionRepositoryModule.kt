@@ -1,4 +1,4 @@
-package com.ulisesg.admingolazopro.core.di.features
+package com.ulisesg.admingolazopro.features.promotion.data.datasource.remote.di
 
 import com.ulisesg.admingolazopro.features.promotion.data.repositories.PromotionRepositoryImpl
 import com.ulisesg.admingolazopro.features.promotion.domain.repositories.PromotionRepository
@@ -18,5 +18,3 @@ abstract class PromotionRepositoryModule {
         promotionRepositoryImpl: PromotionRepositoryImpl
     ): PromotionRepository
 }
-
-

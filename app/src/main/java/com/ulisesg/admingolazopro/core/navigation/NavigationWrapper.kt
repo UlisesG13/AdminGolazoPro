@@ -26,7 +26,7 @@ fun NavigationWrapper() {
     val navController = rememberNavController()
 
     // Configuramos Login como la pantalla inicial obligatoria
-    NavHost(navController = navController, startDestination = Home) {
+    NavHost(navController = navController, startDestination = Login) {
 
         composable<Login> {
             LoginScreen(

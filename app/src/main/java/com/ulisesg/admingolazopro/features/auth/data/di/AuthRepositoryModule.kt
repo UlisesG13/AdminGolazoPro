@@ -1,4 +1,4 @@
-package com.ulisesg.admingolazopro.core.di.features
+package com.ulisesg.admingolazopro.features.auth.data.di
 
 import com.ulisesg.admingolazopro.features.auth.data.repositories.AuthRepositoryImpl
 import com.ulisesg.admingolazopro.features.auth.domain.repositories.AuthRepository
@@ -10,11 +10,11 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-abstract class RepositoryModule {
+abstract class AuthRepositoryModule {
+
     @Binds
     @Singleton
     abstract fun bindAuthRepository(
-        productsRepositoryImpl: AuthRepositoryImpl
+        authRepositoryImpl: AuthRepositoryImpl
     ): AuthRepository
 }
-

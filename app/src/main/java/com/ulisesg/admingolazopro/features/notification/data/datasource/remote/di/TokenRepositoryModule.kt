@@ -1,4 +1,4 @@
-package com.ulisesg.admingolazopro.core.di.features
+package com.ulisesg.admingolazopro.features.notification.data.datasource.remote.di
 
 import com.ulisesg.admingolazopro.features.notification.data.datasource.remote.api.FCMTokenDataSource
 import com.ulisesg.admingolazopro.features.notification.data.repositories.FCMRepositoryImpl
@@ -30,4 +30,3 @@ abstract class TokenRepositoryModule {
         }
     }
 }
-

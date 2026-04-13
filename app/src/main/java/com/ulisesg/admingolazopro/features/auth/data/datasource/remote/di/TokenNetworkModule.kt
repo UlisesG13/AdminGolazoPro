@@ -1,4 +1,4 @@
-package com.ulisesg.admingolazopro.core.di.features
+package com.ulisesg.admingolazopro.features.auth.data.datasource.remote.di
 
 import com.ulisesg.admingolazopro.features.notification.data.datasource.remote.api.TokenApi
 import dagger.Module
@@ -18,5 +18,3 @@ object TokenNetworkModule {
         return retrofit.create(TokenApi::class.java)
     }
 }
-
-
