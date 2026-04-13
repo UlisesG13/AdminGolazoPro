@@ -118,4 +118,5 @@ dependencies {
 
     implementation(libs.firebase.messaging)
     implementation(libs.androidx.work.runtime.ktx)
+    implementation(libs.androidx.biometric)
 }

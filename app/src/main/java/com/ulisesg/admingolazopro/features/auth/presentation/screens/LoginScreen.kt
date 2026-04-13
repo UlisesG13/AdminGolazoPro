@@ -19,19 +19,29 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.compose.material.icons.filled.Fingerprint
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.platform.LocalContext
+import androidx.fragment.app.FragmentActivity
+import kotlinx.coroutines.launch
 import com.ulisesg.admingolazopro.features.auth.presentation.components.AuthButton
 import com.ulisesg.admingolazopro.features.auth.presentation.components.EmailField
 import com.ulisesg.admingolazopro.features.auth.presentation.components.PasswordField
 import com.ulisesg.admingolazopro.features.auth.presentation.viewmodels.AuthViewModel
+import com.ulisesg.admingolazopro.features.auth.presentation.viewmodels.BiometricViewModel
 
 @Composable
 fun LoginScreen(
     viewModel: AuthViewModel = hiltViewModel(),
+    biometricViewModel: BiometricViewModel = hiltViewModel(),
     onLoginSuccess: () -> Unit,
     onRegister: () -> Unit
 ) {
     val state by viewModel.state.collectAsState()
     val snackbarHostState = remember { SnackbarHostState() }
+    val scope = rememberCoroutineScope()
+    val context = LocalContext.current
+    val activity = context as? FragmentActivity
 
     LaunchedEffect(state.error) {
         state.error?.let {
@@ -116,6 +126,36 @@ fun LoginScreen(
                 isLoading = state.isLoading,
                 onClick = { viewModel.login() }
             )
+
+            if (biometricViewModel.canAuthenticate()) {
+                Spacer(modifier = Modifier.height(16.dp))
+                OutlinedButton(
+                    onClick = {
+                        activity?.let {
+                            biometricViewModel.authenticate(
+                                activity = it,
+                                onSuccess = onLoginSuccess,
+                                onError = { error ->
+                                    scope.launch {
+                                        snackbarHostState.showSnackbar(error)
+                                    }
+                                }
+                            )
+                        }
+                    },
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = MaterialTheme.shapes.medium,
+                    contentPadding = PaddingValues(16.dp)
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Fingerprint,
+                        contentDescription = null,
+                        modifier = Modifier.size(24.dp)
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text("Ingresar con Biometría")
+                }
+            }
             
             Spacer(modifier = Modifier.height(24.dp))
             
