@@ -119,4 +119,8 @@ dependencies {
     implementation(libs.firebase.messaging)
     implementation(libs.androidx.work.runtime.ktx)
     implementation(libs.androidx.biometric)
+
+    implementation(libs.okhttp)
+    implementation(libs.okhttp.logging)
+    implementation(libs.androidx.security.crypto)
 }

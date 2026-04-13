@@ -14,7 +14,6 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 abstract class TokenRepositoryModule {
 
-    // Esto le dice a Hilt: "Cuando alguien pida FCMRepository, dale FCMRepositoryImpl"
     @Binds
     @Singleton
     abstract fun bindTokenRepository(
@@ -22,7 +21,6 @@ abstract class TokenRepositoryModule {
     ): FCMRepository
 
     companion object {
-        // Como FCMTokenDataSource no es una interfaz, usamos @Provides aquí
         @Provides
         @Singleton
         fun provideFCMTokenDataSource(): FCMTokenDataSource {
