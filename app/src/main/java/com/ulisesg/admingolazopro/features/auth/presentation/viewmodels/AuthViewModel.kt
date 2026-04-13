@@ -2,6 +2,7 @@ package com.ulisesg.admingolazopro.features.auth.presentation.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.ulisesg.admingolazopro.core.auth.BiometricStorage
 import com.ulisesg.admingolazopro.features.auth.domain.entities.Rol
 import com.ulisesg.admingolazopro.features.auth.domain.entities.User
 import com.ulisesg.admingolazopro.features.auth.domain.usecases.Login
@@ -20,7 +21,8 @@ import javax.inject.Inject
 class AuthViewModel @Inject constructor(
     private val loginUseCase: Login,
     private val registerUseCase: Register,
-    private val registerFCMTokenUseCase: RegisterFCMTokenUseCase
+    private val registerFCMTokenUseCase: RegisterFCMTokenUseCase,
+    private val biometricStorage: BiometricStorage
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(
@@ -48,22 +50,33 @@ class AuthViewModel @Inject constructor(
         _state.update { it.copy(user = it.user?.copy(nombre = nombre)) }
     }
 
-    fun login() {
+    fun loginWithBiometrics(onNoCredentials: () -> Unit) {
+        val credentials = biometricStorage.getCredentials()
+        if (credentials != null) {
+            // Si hay credenciales, las ponemos en el estado e intentamos login
+            updateEmail(credentials.first)
+            updatePassword(credentials.second)
+            login(saveForBiometrics = false) // No necesitamos volver a guardar
+        } else {
+            // Si no hay, avisamos a la UI para que pida los datos
+            onNoCredentials()
+        }
+    }
+
+    fun login(saveForBiometrics: Boolean = true) {
         val user = _state.value.user ?: return
         viewModelScope.launch {
             _state.update { it.copy(isLoading = true, error = null) }
             try {
                 val result = loginUseCase(user)
 
-                registerFCMTokenUseCase()
-
-                _state.update {
-                    it.copy(
-                        isLoading = false,
-                        user = result,
-                        isAuthenticated = true
-                    )
+                // Si el login es exitoso y el flag está activo, guardamos para la próxima vez
+                if (saveForBiometrics) {
+                    biometricStorage.saveCredentials(user.email, user.password)
                 }
+
+                registerFCMTokenUseCase()
+                _state.update { it.copy(isLoading = false, user = result, isAuthenticated = true) }
             } catch (e: Exception) {
                 _state.update { it.copy(isLoading = false, error = e.message ?: "Error desconocido") }
             }

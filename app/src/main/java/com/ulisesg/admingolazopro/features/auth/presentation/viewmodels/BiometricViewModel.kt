@@ -1,6 +1,7 @@
 package com.ulisesg.admingolazopro.features.auth.presentation.viewmodels
 
 import android.content.Context
+import android.util.Log
 import androidx.biometric.BiometricManager
 import androidx.biometric.BiometricPrompt
 import androidx.core.content.ContextCompat
@@ -17,9 +18,22 @@ class BiometricViewModel @Inject constructor(
 
     fun canAuthenticate(): Boolean {
         val biometricManager = BiometricManager.from(context)
-        return biometricManager.canAuthenticate(
+        val status = biometricManager.canAuthenticate(
             BiometricManager.Authenticators.BIOMETRIC_STRONG or BiometricManager.Authenticators.DEVICE_CREDENTIAL
-        ) == BiometricManager.BIOMETRIC_SUCCESS
+        )
+        Log.d("BIOMETRIC_DEBUG", "CanAuthenticate Status: $status")
+        
+        when (status) {
+            BiometricManager.BIOMETRIC_SUCCESS -> Log.d("BIOMETRIC_DEBUG", "La app puede autenticar usando biometría.")
+            BiometricManager.BIOMETRIC_ERROR_NO_HARDWARE -> Log.e("BIOMETRIC_DEBUG", "No hay hardware biométrico disponible en este dispositivo.")
+            BiometricManager.BIOMETRIC_ERROR_HW_UNAVAILABLE -> Log.e("BIOMETRIC_DEBUG", "Las funciones biométricas no están disponibles actualmente.")
+            BiometricManager.BIOMETRIC_ERROR_NONE_ENROLLED -> Log.e("BIOMETRIC_DEBUG", "El usuario no tiene credenciales biométricas asociadas.")
+            BiometricManager.BIOMETRIC_ERROR_SECURITY_UPDATE_REQUIRED -> Log.e("BIOMETRIC_DEBUG", "Se requiere una actualización de seguridad.")
+            BiometricManager.BIOMETRIC_ERROR_UNSUPPORTED -> Log.e("BIOMETRIC_DEBUG", "Biometría no soportada.")
+            BiometricManager.BIOMETRIC_STATUS_UNKNOWN -> Log.e("BIOMETRIC_DEBUG", "Estado biométrico desconocido.")
+        }
+        
+        return status == BiometricManager.BIOMETRIC_SUCCESS
     }
 
     fun authenticate(
@@ -34,16 +48,19 @@ class BiometricViewModel @Inject constructor(
             object : BiometricPrompt.AuthenticationCallback() {
                 override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
                     super.onAuthenticationError(errorCode, errString)
+                    Log.e("BIOMETRIC_DEBUG", "Error de autenticación: ($errorCode) $errString")
                     onError(errString.toString())
                 }
 
                 override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
                     super.onAuthenticationSucceeded(result)
+                    Log.d("BIOMETRIC_DEBUG", "Autenticación exitosa")
                     onSuccess()
                 }
 
                 override fun onAuthenticationFailed() {
                     super.onAuthenticationFailed()
+                    Log.w("BIOMETRIC_DEBUG", "Autenticación fallida (huella no reconocida, etc.)")
                     onError("Autenticación fallida")
                 }
             }
