@@ -118,6 +118,8 @@ dependencies {
 
     implementation(libs.firebase.messaging)
     implementation(libs.androidx.work.runtime.ktx)
+    implementation(libs.hilt.work)
+    ksp(libs.hilt.work.compiler)
     implementation(libs.androidx.biometric)
 
     implementation(libs.okhttp)

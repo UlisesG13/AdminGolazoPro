@@ -20,6 +20,7 @@ navigationCompose = "2.9.7"
 iconsExtended = "1.7.8"
 secretsGradle = "2.0.1"
 hilt = "2.59.2"
+hiltWorker = "1.2.0"
 room = "2.8.4"
 biometric = "1.1.0"
 security-crypto = "1.1.0"
@@ -61,6 +62,8 @@ androidx-compose-material-icons-extended = { group = "androidx.compose.material"
 hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
 hilt-compiler = { group = "com.google.dagger", name = "hilt-compiler", version.ref = "hilt" }
 hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "hiltNavigationCompose" }
+hilt-work = { group = "androidx.hilt", name = "hilt-work", version.ref = "hiltWorker" }
+hilt-work-compiler = { group = "androidx.hilt", name = "hilt-compiler", version.ref = "hiltWorker" }
 # Room
 room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
 room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }

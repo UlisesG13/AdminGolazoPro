@@ -12,6 +12,9 @@ interface ProductDao {
     @Query("SELECT * FROM products")
     suspend fun getProducts(): List<ProductEntity>
 
+    @Query("SELECT * FROM products")
+    fun getAllProductsSync(): List<ProductEntity>
+
     @Query("SELECT * FROM products WHERE id = :id")
     suspend fun getProductById(id: String): ProductEntity?
 

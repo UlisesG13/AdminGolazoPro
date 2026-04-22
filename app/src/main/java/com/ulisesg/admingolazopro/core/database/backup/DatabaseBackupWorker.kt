@@ -1,38 +1,55 @@
 package com.ulisesg.admingolazopro.core.database.backup
 
 import android.content.Context
-import androidx.work.Worker
+import androidx.hilt.work.HiltWorker
+import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
+import com.ulisesg.admingolazopro.features.products.data.datasource.local.dao.ProductDao
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedInject
 import java.io.File
-import java.io.FileInputStream
-import java.io.FileOutputStream
 
-class DatabaseBackupWorker(
-    context: Context,
-    workerParams: WorkerParameters
-) : Worker(context, workerParams) {
+@HiltWorker
+class DatabaseBackupWorker @AssistedInject constructor(
+    @Assisted context: Context,
+    @Assisted workerParams: WorkerParameters,
+    private val productDao: ProductDao
+) : CoroutineWorker(context, workerParams) {
 
-    override fun doWork(): Result {
+    override suspend fun doWork(): Result {
         return try {
-            val dbName = "app_database"
-            val dbFile = applicationContext.getDatabasePath(dbName)
-            
-            if (dbFile.exists()) {
-                val backupFile = File(applicationContext.getExternalFilesDir(null), "$dbName-backup.db")
+            // 1. Obtener productos de la DB
+            val products = productDao.getAllProductsSync()
+            println("DEBUG: Cantidad de productos encontrados: ${products.size}") // Ver en Logcat
+            // 2. Crear el contenido del backup
+            val backupContent = StringBuilder()
+            backupContent.append("RESPALDO DE PRODUCTOS\n")
+            backupContent.append("=====================\n\n")
+
+            products.forEach { product ->
+                backupContent.append("ID: ${product.id}\n")
+                backupContent.append("Nombre: ${product.nombre}\n")
+                backupContent.append("Precio: ${product.precio}\n")
+                backupContent.append("Descripción: ${product.descripcion}\n")
+                backupContent.append("Categoría ID: ${product.categoriaId}\n")
+                backupContent.append("Estado: ${if (product.estaActivo) "Activo" else "Inactivo"}\n")
                 
-                FileInputStream(dbFile).use { input ->
-                    FileOutputStream(backupFile).use { output ->
-                        input.copyTo(output)
-                    }
-                }
-                Result.success()
-            } else {
-                Result.failure()
+                // Lógica solicitada para la imagen
+                backupContent.append("Imagen: [Imagen de ${product.nombre}]\n")
+                
+                backupContent.append("---------------------\n")
             }
+
+            backupContent.append("\nRESPALDO FINALIZADO - FECHA: ${java.util.Date()}\n")
+
+            // 3. Guardar en un archivo .txt en el almacenamiento externo de la app
+            val backupFile = File(applicationContext.getExternalFilesDir(null), "productos_backup.txt")
+            backupFile.writeText(backupContent.toString())
+
+            Result.success()
         } catch (e: Exception) {
             e.printStackTrace()
             Result.failure()
         }
     }
 }
-
